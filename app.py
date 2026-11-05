@@ -202,7 +202,7 @@ TXT = {
         intro_exp="서비스 소개 — 한국 쌀 보험 구조와 ClimateCredit 보정 방식",
         eq_title="한국 쌀 보험, 이렇게 계산돼요", eq_cap="최근 5년 수확량 (예시 그림)", eq_bad="흉년", eq_avg="평균",
         eq_base="기준수확량", eq_area="면적", eq_cov="보장수준", eq_cov_s="60~90%", eq_price="가격", eq_amt="가입금액",
-        eq_prob="문제: 흉년이 한 번 끼면 평균이 내려가 몇 해 동안 가입금액이 줄어요", eq_note="보험료의 일부는 국비로 지원돼요",
+        eq_prob="문제: 흉년이 한 번 끼면 평균이 내려가고, 가입금액이 줄어요. 그러면 나중에 사고가 났을 때 받을 수 있는 보장(보험금 한도)도 몇 해 동안 함께 줄어요", eq_note="보험료의 일부는 국비로 지원돼요",
         flow_title="ClimateCredit은 이렇게 보정해요",
         flow=[("pin", "입력", "논 위치 · 이앙일", ""), ("cloud", "데이터", "기상청 · 통계청", ""), ("net", "모델", "날씨가 수확량에 준 영향", ""),
               ("fix", "보정", "흉년을 평년 수확량으로", "y"), ("won", "결과", "보장수준별 가입금액", "y")],
@@ -290,20 +290,20 @@ TXT = {
         replaced="**{ys}**: weather impact was large, so the yield is **replaced by the yield expected under normal weather** "
                  "(at most {mx} of the last 5 years, capped at +{cap:.0f}%).",
         noshock="No year in the last 5 had a large weather impact, so the adjusted value equals the 5-year average.",
-        actual="Actual yield", used="Value used for reference yield", rep_lbl="Replaced with normal-weather yield", wx="weather effect", unit="kg/10a",
+        actual="Actual yield", used="Value used for base yield", rep_lbl="Replaced with normal-weather yield", wx="weather effect", unit="kg/10a",
         h3="③ Why this amount? How the 5-year average was adjusted",
         cols=["Coverage", "5-year average basis", "After weather adjustment", "Difference", "Govt. premium subsidy"], won=" KRW",
-        cap_amt="The insured amount is the basis of cover, not the amount paid in a claim. Insured amount = reference yield × area ({a:.1f} ha) × coverage × price ({p:,} KRW/kg, team assumption). Final figures are confirmed after actuarial review.",
+        cap_amt="The insured amount is the basis of cover, not the amount paid in a claim. Insured amount = base yield × area ({a:.1f} ha) × coverage × price ({p:,} KRW/kg, team assumption). Final figures are confirmed after actuarial review.",
         h4="④ Validation",
         va_title="A. Prediction accuracy (leave-one-year-out)",
         va_sub="2001–2025, 78 counties nationwide. Error = RMSE of the predicted yield change vs the 5-year average (% points). Lower is better.",
         v1="5-year average · nationwide", v2="Weather model · nationwide", v3="5-year average · Jeonnam", v4="Weather model · Jeonnam",
         vb_title="B. Effect of the adjustment (Jeonnam backtest)",
         vb_sub="22 Jeonnam counties × 2006–2025. Only cases where a shock year was replaced are compared ({n} of {N} county-years).",
-        vb1="Cases adjusted", vb2="Adjusted reference yield closer to next year's actual", vb3="Mean error (5-yr avg → adjusted)", vb4="Average reference-yield uplift",
+        vb1="Cases adjusted", vb2="Adjusted base yield closer to next year's actual", vb3="Mean error (5-yr avg → adjusted)", vb4="Average base-yield uplift",
         vb_note="{c:.0f}% refers to the {n} adjusted cases, not to all cases. Weather effects use the model fitted on all years, so this is somewhat optimistic.",
-        prob="Problem: in Korea's rice insurance the reference yield is the average of the last five years, so one bad-weather year can lower a farm's cover for several years. This prototype replaces such a year with the yield expected under normal weather.",
-        term_note="Reference yield = the yield on which insured amounts are calculated · kg/10a = kg of milled rice per 10 ares (1,000 m²)", axis_note="axis starts at 380",
+        prob="Problem: in Korea's rice insurance the base yield is the average of the last five years, so one bad-weather year can lower a farm's cover for several years. This prototype replaces such a year with the yield expected under normal weather.",
+        term_note="Base yield = the yield on which insured amounts are calculated · kg/10a = kg of milled rice per 10 ares (1,000 m²)", axis_note="axis starts at 380",
         bt="Jeonnam backtest, 22 counties × 2006–2025: in the {n} cases where shock years were replaced, the adjusted base was closer to the next year's actual yield in {c:.0f}% of cases; "
            "mean error {e1:.1f} → {e2:.1f} kg/10a. Average base-yield uplift {u:+.1f}%.",
         exp="Assumptions and limitations (team assumptions are not yet validated)",
@@ -315,8 +315,8 @@ TXT = {
                 "- A prototype until re-validated with the insurer's own enrollment and claims data."),
         intro_exp="Introduction — how Korea's rice insurance works and how ClimateCredit adjusts it",
         eq_title="How Korea's rice insurance works", eq_cap="Yield, last 5 years (illustration)", eq_bad="bad year", eq_avg="average",
-        eq_base="Reference yield", eq_area="Area", eq_cov="Coverage", eq_cov_s="60-90%", eq_price="Price", eq_amt="Insured amount",
-        eq_prob="Problem: one bad-weather year pulls the average down and lowers the insured amount for years", eq_note="Part of the premium is paid by the government",
+        eq_base="Base yield", eq_area="Area", eq_cov="Coverage", eq_cov_s="60-90%", eq_price="Price", eq_amt="Insured amount",
+        eq_prob="Problem: one bad-weather year pulls the average down and lowers the insured amount. Then the cover a farmer can claim after a loss (the claim limit) is lower too, for several years", eq_note="Part of the premium is paid by the government",
         flow_title="How ClimateCredit adjusts it",
         flow=[("pin", "Input", "Location · transplanting date", ""), ("cloud", "Data", "Weather · yield records", ""), ("net", "Model", "Weather's effect on yield", ""),
               ("fix", "Adjust", "Bad year → normal-weather yield", "y"), ("won", "Result", "Insured amount by coverage", "y")],
@@ -327,10 +327,10 @@ TXT = {
         guide_title="What does each item mean, and how does it affect the result?",
         guide_cols=["Item", "What it means", "How it affects the result"],
         guide_rows=[
-            ("5-year average (current method)", "The county's average yield per 10 ares over the 5 years before enrollment. This is the 'reference yield' on which the insured amount is based.",
+            ("5-year average (current method)", "The county's average yield per 10 ares over the 5 years before enrollment. This is the 'base yield' on which the insured amount is based.",
              "A higher value means a higher insured amount. One bad-weather year pulls it down for several years."),
             ("After weather adjustment", "The 5-year average recomputed after replacing years with a large weather impact (at most {mx}) by the yield expected under normal weather.",
-             "The reference yield that bad weather pushed down is restored, so the insured amount rises. The rise is capped at +{cap:.0f}%."),
+             "The base yield that bad weather pushed down is restored, so the insured amount rises. The rise is capped at +{cap:.0f}%."),
             ("Weather effect (%)", "How many percent the model estimates that year's growth-stage weather raised or lowered the yield compared with normal.",
              "At {thr:.0f}% or lower (a large drop) the year counts as a large weather impact and becomes a candidate for replacement."),
             ("Field location (city / county)", "Used to find the nearest KMA weather station. That station's daily data is the weather input.",
@@ -344,8 +344,8 @@ TXT = {
             ("Paddy area (ha)", "The size of the field to be insured.", "The insured amount is proportional to area."),
             ("Insured price (KRW/kg)", "The per-kg price multiplied in the calculation. Team assumption: {price:,} KRW.",
              "The insured amount is proportional to it. It may differ from the actual insured price."),
-            ("Coverage level (60-90%)", "What share of the reference yield is taken as the basis of cover.",
-             "Higher means a larger insured amount and premium. Insured amount = reference yield × area × coverage × price."),
+            ("Coverage level (60-90%)", "What share of the base yield is taken as the basis of cover.",
+             "Higher means a larger insured amount and premium. Insured amount = base yield × area × coverage × price."),
             ("Govt. premium subsidy", "The share of the premium the government pays on the farmer's behalf. It falls as coverage rises (65% to 33%).",
              "Not used in the insured-amount calculation; shown for reference."),
         ],
@@ -353,7 +353,7 @@ TXT = {
         help_cond="The chosen value is not used in the calculation for now. Only whether you tick it under 'Items verified against records' counts toward confidence.",
         help_tdate="The date fixes the tillering, panicle-initiation, heading and ripening windows; the weather in each window is the model input.",
         help_area="The insured amount is proportional to area.",
-        help_price="Insured amount = reference yield × area × coverage × price. A team assumption, so it may differ from the actual insured price.",
+        help_price="Insured amount = base yield × area × coverage × price. A team assumption, so it may differ from the actual insured price.",
         help_year="The 5-year average uses the 5 years before this year. Example: 2025 uses 2020-2024.",
         help_ver="Tick only items that can be checked against enrollment/claims records. With fewer than 4, no adjustment is applied.",
         foot="ClimateCredit · APRU hackathon prototype · Data: Statistics Korea (KOSIS), Korea Meteorological Administration (ASOS)",
@@ -491,7 +491,7 @@ with ans_box:
 
 with right:
     if "regional_base" in q:
-        # ---- basis: how the reference yield was adjusted ----
+        # ---- basis: how the base yield was adjusted ----
         sec(t["h3"])
         conf = q["confidence"]
         bcol = {"High": G6, "Medium": GOLD, "Low": "#D73027"}[conf]
