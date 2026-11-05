@@ -21,7 +21,9 @@ st.markdown(f"""
 <style>
 .stApp {{ background:#F5F9F6; }}
 .block-container {{ padding-top: 1.4rem; padding-bottom: 2rem; max-width: 1400px; }}
-header[data-testid="stHeader"] {{ background: transparent; }}
+header[data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"], [data-testid="stStatusWidget"], #MainMenu, footer {{ display:none !important; }}
+.cc-prob {{ background:#FFF8E5; border-left:5px solid {GOLD}; border-radius:10px; padding:10px 16px; margin:6px 0 16px; color:{G9}; font-size:.92rem; line-height:1.5; word-break:keep-all; }}
+.cc-subh {{ font-weight:800; color:{G9}; font-size:1rem; margin:2px 0 0; }}
 .cc-tag {{ color:#4C6B5C; font-size:1.0rem; margin-top:10px; line-height:1.4; }}
 .cc-pill {{ display:inline-block; background:{GOLD}; color:#fff; font-weight:700; font-size:.72rem; border-radius:999px; padding:2px 10px; margin-right:8px; vertical-align:middle; }}
 .cc-sec {{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.2rem; color:{G9}; margin:4px 0 12px; }}
@@ -30,7 +32,7 @@ header[data-testid="stHeader"] {{ background: transparent; }}
             height:152px; display:flex; flex-direction:column; justify-content:flex-start; box-sizing:border-box; overflow:hidden; }}
 .cc-card .cc-lab {{ min-height:2.4em; line-height:1.2; }}
 .cc-sub {{ font-size:.78rem; color:#5B7A6B; margin-top:2px; }}
-.cc-val.sm {{ font-size:1.45rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }}
+.cc-val.sm {{ font-size:1.3rem; white-space:normal; word-break:break-word; line-height:1.2; }}
 .cc-card.hl {{ border:2px solid {G6}; background:linear-gradient(180deg,#fff 0%,{G1} 100%); }}
 .cc-lab {{ font-size:.78rem; color:#5B7A6B; font-weight:600; }}
 .cc-val {{ font-size:1.8rem; font-weight:800; color:{G9}; line-height:1.25; }}
@@ -134,7 +136,7 @@ TXT = {
         sb4_k="알려진 한계", sb4_v="모델은 이앙일 6월 1일로 학습했습니다. 다른 이앙일은 기상 구간만 다시 계산하며, 그 예측 효과는 아직 검증하지 않았습니다.",
         conf_reason="체크리스트 {n}/6개 확인 · 관측소 {stn}", stn_own="동일 지역", stn_near="인접 지역",
         conf_note="신뢰도는 입력 확인 수준이며 예측 정확도를 뜻하지 않습니다.", sub="흥국화재 계리 담당자 검토용 · 쌀(논벼) · 전남 파일럿",
-        h1="① 가입 체크리스트", prov="논 위치 ① 도·광역시", county="논 위치 ② 시·군", variety="품종",
+        h1="① 가입 체크리스트", prov="논 위치 ① 도·광역시", county="논 위치 ② 시·군", variety="품종 (숙기)",
         other_prov="전남 외 지역은 같은 모델로 계산한 참고용이며, 파일럿 검증은 전남에서 했습니다.",
         varieties=["조생종", "중생종", "중만생종"], tdate="이앙일 (월·일만 사용, 연도 무관)", tmonth="월", tday="일",
         irrig="관개·배수", irrigs=["양호", "보통", "불량"],
@@ -148,11 +150,19 @@ TXT = {
         fb="확인 수준 Low (체크리스트 {n}/6개 확인, 보정에는 4개 이상 필요): 보정을 적용하지 않고 5개년 평균을 사용합니다.",
         replaced="**{ys}년**은 기상 영향이 컸던 해로 판정되어 **평년 날씨였다면의 수확량으로 대체**했습니다 (최근 5년 중 최대 {mx}개, 상한 +{cap:.0f}%).",
         noshock="최근 5년 중 기상 영향이 큰 해가 없어 5개년 평균과 같은 값을 사용합니다.",
-        actual="실제 수확량", used="기준에 쓴 값", rep_lbl="평년 날씨 기준으로 대체한 해", wx="기상", unit="kg/10a",
+        actual="실제 수확량", used="기준에 쓴 값", rep_lbl="평년 날씨 기준으로 대체한 해", wx="기상 효과", unit="kg/10a",
         h3="③ 보장수준별 가입금액 예시 (지급보험금 아님)", cols=["보장수준", "5개년 평균 기준", "기상 보정 후", "차이", "국비 보험료 보조율"], won="원",
         cap_amt="가입금액은 보장의 기준이 되는 금액이며 사고 때 받는 보험금이 아닙니다. 가입금액 = 기준수확량 × 면적({a:.1f}ha) × 보장수준 × 가입가격({p:,}원/kg, 팀 가정). 최종 금액은 계리 검토 후 확정됩니다.",
-        h4="④ 검증 — 연도 하나씩 빼고 예측한 결과 (2001~2025, 전국 78개 시군)",
-        v1="5개년 평균 방식 오차", v2="기상 모델 오차", v3="전남 시군만 · 기준선", v4="전남 시군만 · 모델",
+        h4="④ 검증",
+        va_title="A. 예측 정확도 (연도 하나씩 빼고 예측)",
+        va_sub="2001~2025년, 전국 78개 시군. 오차 = 5개년 평균 대비 수확량 변동률 예측의 RMSE(%p). 낮을수록 좋습니다.",
+        v1="5개년 평균 방식 · 전국", v2="기상 모델 · 전국", v3="5개년 평균 방식 · 전남", v4="기상 모델 · 전남",
+        vb_title="B. 보정 효과 (전남 백테스트)",
+        vb_sub="전남 22개 시군 × 2006~2025년. 이상기후 해를 대체한 경우만 비교합니다 (전체 {N}건 중 {n}건).",
+        vb1="보정이 적용된 경우", vb2="다음 해 실제에 더 가까워진 비율", vb3="평균 오차 (5개년 평균 → 보정)", vb4="기준수확량 평균 상승",
+        vb_note="{c:.0f}%는 보정이 적용된 {n}건 기준이며 전체 사례의 개선율이 아닙니다. 기상 효과 추정에 전체 연도로 학습한 모델을 쓰므로 다소 낙관적일 수 있습니다.",
+        prob="문제: 한국 쌀 보험의 기준수확량은 최근 5년 평균이라서, 기상이 나쁜 해가 한 번 있으면 이후 몇 해 동안 농가의 보장이 낮아집니다. 이 프로토타입은 그런 해를 '평년 날씨였다면의 수확량'으로 바꿔서 기준을 보정합니다.",
+        term_note="기준수확량 = 가입금액 계산의 기준이 되는 수확량 · kg/10a = 10아르(1,000㎡)당 정곡 kg", axis_note="축은 380에서 시작",
         bt="전남 22개 시군 × 2006~2025 백테스트: 기상 영향이 큰 해를 대체한 {n}건에서 보정한 기준수확량이 다음 해 실제 수확량에 더 가까운 비율 {c:.0f}%, 평균 오차 {e1:.1f} → {e2:.1f} kg/10a. 평균 기준수확량 상승 {u:+.1f}%.",
         exp="가정과 한계 (팀 가정은 검증 전 값)",
         assume=("- 학습 기상은 이앙일을 **6월 1일**로 고정한 값이고, 시연에서만 농가 입력 이앙일로 생육 구간을 옮겨 계산합니다.\n"
@@ -190,7 +200,7 @@ TXT = {
         conf_reason="{n}/6 checklist items verified · station {stn}", stn_own="same area", stn_near="nearby",
         conf_note="This level reflects input verification, not prediction accuracy.",
         sub="For Heungkuk Fire & Marine actuaries · Rice (paddy) · Jeonnam pilot",
-        h1="① Enrollment checklist", prov="Field location ① Province", county="Field location ② City / county", variety="Rice variety",
+        h1="① Enrollment checklist", prov="Field location ① Province", county="Field location ② City / county", variety="Rice maturity group",
         other_prov="Outside Jeonnam the same model is applied for reference only; the pilot was validated in Jeonnam.",
         varieties=["Early-maturing", "Mid-maturing", "Mid-late maturing"], tdate="Transplanting date (month/day only, year not used)",
         tmonth="Month", tday="Day", irrig="Irrigation / drainage",
@@ -201,7 +211,7 @@ TXT = {
         price="Insured price (KRW/kg, team assumption)", year="Enrollment year (uses the previous 5 years)",
         note="Inputs used **directly by the model**: **field location (weather station) and transplanting date** (growth-stage weather). "
              "The other items only affect the confidence label for now; adding them to the model is a post-validation step.",
-        h2="② Weather exposure by location and transplanting date → adjusted base yield",
+        h2="② Weather exposure by location and transplanting date → adjusted reference yield",
         missing="Not enough yield history for this county, so the 5-year average is used.",
         m_reg="5-year average (current method)", m_adj="After weather adjustment", m_stn="Nearest weather station", own=" · same area", near=" · nearby",
         m_conf="Checklist verification level",
@@ -209,12 +219,20 @@ TXT = {
         replaced="**{ys}**: weather impact was large, so the yield is **replaced by the yield expected under normal weather** "
                  "(at most {mx} of the last 5 years, capped at +{cap:.0f}%).",
         noshock="No year in the last 5 had a large weather impact, so the adjusted value equals the 5-year average.",
-        actual="Actual yield", used="Value used for base yield", rep_lbl="Replaced with normal-weather yield", wx="weather", unit="kg/10a",
+        actual="Actual yield", used="Value used for reference yield", rep_lbl="Replaced with normal-weather yield", wx="weather effect", unit="kg/10a",
         h3="③ Illustrative insured amount by coverage level (not a claim payout)",
         cols=["Coverage", "5-year average basis", "After weather adjustment", "Difference", "Govt. premium subsidy"], won=" KRW",
-        cap_amt="The insured amount is the basis of cover, not the amount paid in a claim. Insured amount = base yield × area ({a:.1f} ha) × coverage × price ({p:,} KRW/kg, team assumption). Final figures are confirmed after actuarial review.",
-        h4="④ Validation — leave-one-year-out prediction (2001–2025, 78 counties nationwide)",
-        v1="5-year-average error", v2="Weather model error", v3="Jeonnam only · baseline", v4="Jeonnam only · model",
+        cap_amt="The insured amount is the basis of cover, not the amount paid in a claim. Insured amount = reference yield × area ({a:.1f} ha) × coverage × price ({p:,} KRW/kg, team assumption). Final figures are confirmed after actuarial review.",
+        h4="④ Validation",
+        va_title="A. Prediction accuracy (leave-one-year-out)",
+        va_sub="2001–2025, 78 counties nationwide. Error = RMSE of the predicted yield change vs the 5-year average (% points). Lower is better.",
+        v1="5-year average · nationwide", v2="Weather model · nationwide", v3="5-year average · Jeonnam", v4="Weather model · Jeonnam",
+        vb_title="B. Effect of the adjustment (Jeonnam backtest)",
+        vb_sub="22 Jeonnam counties × 2006–2025. Only cases where a shock year was replaced are compared ({n} of {N} county-years).",
+        vb1="Cases adjusted", vb2="Adjusted reference yield closer to next year's actual", vb3="Mean error (5-yr avg → adjusted)", vb4="Average reference-yield uplift",
+        vb_note="{c:.0f}% refers to the {n} adjusted cases, not to all cases. Weather effects use the model fitted on all years, so this is somewhat optimistic.",
+        prob="Problem: in Korea's rice insurance the reference yield is the average of the last five years, so one bad-weather year can lower a farm's cover for several years. This prototype replaces such a year with the yield expected under normal weather.",
+        term_note="Reference yield = the yield on which insured amounts are calculated · kg/10a = kg of milled rice per 10 ares (1,000 m²)", axis_note="axis starts at 380",
         bt="Jeonnam backtest, 22 counties × 2006–2025: in the {n} cases where shock years were replaced, the adjusted base was closer to the next year's actual yield in {c:.0f}% of cases; "
            "mean error {e1:.1f} → {e2:.1f} kg/10a. Average base-yield uplift {u:+.1f}%.",
         exp="Assumptions and limitations (team assumptions are not yet validated)",
@@ -270,7 +288,7 @@ with h2c:
     st.markdown(f"<div class='cc-tag'><span class='cc-pill'>{t['pill']}</span><b style='color:{G9}'>{t['tag']}</b><br>{t['sub']}</div>",
                 unsafe_allow_html=True)
 
-st.write("")
+st.markdown(f"<div class='cc-prob'>{t['prob']}</div>", unsafe_allow_html=True)
 left, right = st.columns([1, 2.1], gap="large")
 
 with left:
@@ -322,7 +340,7 @@ with right:
         c4.markdown(f"<div class='cc-card'><div class='cc-lab'>{t['m_conf']}</div>"
                     f"<div style='margin-top:4px'><span class='cc-badge' style='background:{bcol}'>{conf}</span></div>"
                     f"<div class='cc-sub'>{reason}</div></div>", unsafe_allow_html=True)
-        st.caption(t["conf_note"])
+        st.caption(f"{t['conf_note']}  \n{t['term_note']}")
 
         if q["fallback"]:
             st.markdown(f"<div class='cc-call bad'>{t['fb'].format(n=n_ok)}</div>", unsafe_allow_html=True)
@@ -350,6 +368,9 @@ with right:
         norm = [q["normal"][i] if rep[i] else q["actual"][i] for i in range(len(yrs))]
         ax.bar(x - 0.2, q["actual"], 0.4, color="#B7CFC1")
         ax.bar(x + 0.2, norm, 0.4, color=[GOLD if r else G6 for r in rep])
+        for i in range(len(yrs)):                      # value labels inside the bars
+            ax.text(x[i] - 0.2, q["actual"][i] - 3, f"{q['actual'][i]:.0f}", ha="center", va="top", fontsize=8, color=G9)
+            ax.text(x[i] + 0.2, norm[i] - 3, f"{norm[i]:.0f}", ha="center", va="top", fontsize=8, color="#fff" if not rep[i] else G9, fontweight="bold")
         for i, e in enumerate(q["effect_pct"]):
             ax.text(x[i], max(q["actual"][i], norm[i]) + 2, f"{t['wx']} {e:+.1f}%", ha="center", fontsize=8.5,
                     color="#B23A2E" if e <= SHOCK_EFFECT_PCT else G9, fontweight="bold" if e <= SHOCK_EFFECT_PCT else "normal")
@@ -357,7 +378,7 @@ with right:
         ax.set_xticklabels(yrs, color=G9)
         lo = min(min(q["actual"]), min(norm))
         ax.set_ylim(lo * 0.85, max(max(q["actual"]), max(norm)) * 1.07)
-        ax.set_ylabel(t["unit"], color=G9)
+        ax.set_ylabel(f"{t['unit']}  ({t['axis_note']})", color=G9, fontsize=8.5)
         ax.tick_params(colors=G9)
         ax.legend(handles=[Patch(color="#B7CFC1", label=t["actual"]), Patch(color=G6, label=t["used"]),
                            Patch(color=GOLD, label=t["rep_lbl"])], fontsize=8.5, loc="upper center",
@@ -473,6 +494,8 @@ st.write("")
 sec(t["h4"])
 sc = res["scores"]
 best = res["best_model"]
+st.markdown(f"<div class='cc-subh'>{t['va_title']}</div>", unsafe_allow_html=True)
+st.caption(t["va_sub"])
 v = st.columns(4)
 v[0].markdown(card(t["v1"], f"{sc['baseline_5yr_avg']['rmse']:.2f}", "%"), unsafe_allow_html=True)
 v[1].markdown(card(t["v2"], f"{sc[best]['rmse']:.2f}", "%", f"▼ {res['improvement_pct_vs_baseline']:.1f}%", hl=True), unsafe_allow_html=True)
@@ -484,8 +507,15 @@ if bt is not None:
     bt["er"] = (bt.y - bt.regional).abs()
     bt["ea"] = (bt.y - bt.adjusted).abs()
     r = bt[bt.replaced > 0]
-    st.caption(t["bt"].format(n=len(r), c=100 * (r.ea < r.er).mean(), e1=r.er.mean(), e2=r.ea.mean(),
-                              u=100 * (r.adjusted / r.regional - 1).mean()))
+    closer = 100 * (r.ea < r.er).mean()
+    st.markdown(f"<div class='cc-subh' style='margin-top:14px'>{t['vb_title']}</div>", unsafe_allow_html=True)
+    st.caption(t["vb_sub"].format(n=len(r), N=len(bt)))
+    b = st.columns(4)
+    b[0].markdown(card(t["vb1"], f"{len(r)}", f"/ {len(bt)}"), unsafe_allow_html=True)
+    b[1].markdown(card(t["vb2"], f"{closer:.0f}", "%", hl=True), unsafe_allow_html=True)
+    b[2].markdown(card(t["vb3"], f"{r.er.mean():.1f} → {r.ea.mean():.1f}", "kg/10a", small=True), unsafe_allow_html=True)
+    b[3].markdown(card(t["vb4"], f"{100 * (r.adjusted / r.regional - 1).mean():+.1f}", "%"), unsafe_allow_html=True)
+    st.caption(t["vb_note"].format(c=closer, n=len(r)))
 with st.expander(t["exp"]):
     st.markdown(t["assume"].format(thr=SHOCK_EFFECT_PCT, mx=MAX_REPLACED, cap=UPLIFT_CAP_PCT))
 st.markdown(f"<div class='cc-foot'>{t['foot']}</div>", unsafe_allow_html=True)
