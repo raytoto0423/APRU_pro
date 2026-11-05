@@ -1,0 +1,38 @@
+{
+  "n_rows": 1655,
+  "n_counties": 78,
+  "years": [
+    2001,
+    2025
+  ],
+  "n_features": 72,
+  "scores": {
+    "baseline_5yr_avg": {
+      "rmse": 6.578638462899784,
+      "mae": 4.987264838495303,
+      "rmse_jeonnam": 7.197518112636636,
+      "mae_jeonnam": 5.4692951112559225
+    },
+    "ridge": {
+      "rmse": 5.558365860753873,
+      "mae": 4.318614017361107,
+      "rmse_jeonnam": 6.065022862086444,
+      "mae_jeonnam": 4.624291550621506
+    },
+    "mlp_ensemble5": {
+      "rmse": 5.496711785744976,
+      "mae": 4.271143775059628,
+      "rmse_jeonnam": 6.0215152354792405,
+      "mae_jeonnam": 4.6120898032191855
+    },
+    "blend_ridge_mlp": {
+      "rmse": 5.451176695839311,
+      "mae": 4.228751998647712,
+      "rmse_jeonnam": 5.974757803445022,
+      "mae_jeonnam": 4.550234548138958
+    }
+  },
+  "best_model": "blend_ridge_mlp",
+  "improvement_pct_vs_baseline": 17.138223561285383,
+  "improvement_pct_vs_baseline_jeonnam": 16.988638167437486
+}
