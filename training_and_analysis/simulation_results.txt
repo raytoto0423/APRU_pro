@@ -1,0 +1,14 @@
+county-years: 365 (22 counties, 2006-2025); adjusted cases: 131 (36%)
+base-yield uplift: all 0.59% | adjusted cases 1.63% (7.7 kg/10a, max 3.79%)
+base-yield error in adjusted cases: 26.7 -> 24.2 kg/10a (-9%), closer in 67%
+
+| Coverage | Extra insured amount, adjusted cases (KRW/ha) | Extra insured amount, all county-years (KRW/ha) | Loss events (reg -> adj) | Extra payout per county-year (KRW/ha) | Break-even premium rate before subsidy | Farmer break-even rate after subsidy |
+|---|---|---|---|---|---|---|
+| 60% | 115,059 | 41,295 | 0 -> 0 | 0 | 0.0% | 0.0% |
+| 70% | 134,235 | 48,178 | 0 -> 1 | 165 | 0.3% | 0.9% |
+| 80% | 153,412 | 55,060 | 3 -> 3 | 1,212 | 2.2% | 4.4% |
+| 85% | 163,000 | 58,501 | 5 -> 5 | 1,288 | 2.2% | 3.6% |
+| 90% | 172,588 | 61,943 | 30 -> 32 | 2,678 | 4.3% | 6.5% |
+
+actual below 90% of base: 30 of 365; below 80%: 3 of 365 (worst -29.4%)
+years with adjustments: {2006: 8, 2007: 8, 2008: 6, 2009: 4, 2010: 4, 2011: 4, 2012: 4, 2013: 11, 2014: 11, 2015: 13, 2016: 14, 2017: 14, 2021: 6, 2022: 6, 2023: 6, 2024: 6, 2025: 6}
