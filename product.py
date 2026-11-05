@@ -113,6 +113,36 @@ class Engine:
         zero = np.zeros_like(x)
         return float(self.predict(x)[0] - self.predict(zero)[0])
 
+    def explain(self, sid, year, md, topk=6):
+        """Break the weather effect of `year` into additive parts.
+
+        effect = 0.5 * ridge(current anomalies) + 0.5 * mlp(...)  (lag features cancel out).
+        The ridge half is linear, so it is split per feature; the neural-net half is shown as one block.
+        Returns {"total", "rows": [...], "other", "nn", "ridge_sum"} (all in % points of yield).
+        """
+        A, F = self._station_years(sid, md)
+        x = self.feature_row(sid, year, md, cur_only=True)
+        if x is None:
+            return None
+        acols = [c for c in self.cols if c.endswith("_anom")]
+        n = len(acols)
+        if self.nm is not None:
+            coef, scale = self.nm.z["r_coef"], self.nm.z["r_scale"]
+        else:
+            sc, rg = self.pack["ridge"].steps[0][1], self.pack["ridge"].steps[1][1]
+            coef, scale = rg.coef_, sc.scale_
+        contrib = 0.5 * coef[:n] * x[:n] / scale[:n]
+        total = self.weather_effect(sid, year, md)
+        rows = []
+        for j in np.argsort(-np.abs(contrib))[:topk]:
+            base = acols[j][:-5]
+            rows.append({"key": base, "value": float(F.loc[year, base]), "normal": float(F[base].mean()),
+                         "anom": float(A.loc[year, acols[j]]), "effect": float(contrib[j])})
+        top_sum = sum(r["effect"] for r in rows)
+        ridge_sum = float(contrib.sum())
+        return {"total": float(total), "rows": rows, "other": ridge_sum - top_sum,
+                "nn": float(total - ridge_sum), "ridge_sum": ridge_sum}
+
     # ---------- main product calculation ----------
     def quote(self, province, county, target_year, transplant_md, n_verified, n_items=6,
               area_ha=1.0, price=DEFAULT_PRICE):
