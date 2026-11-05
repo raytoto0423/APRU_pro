@@ -67,6 +67,27 @@ table.cc-t th, table.cc-t td {{ border-left: none !important; border-right: none
 table.cc-t tr.r80 td {{ background:{G1} !important; font-weight:700; }}
 table.cc-t.txt th, table.cc-t.txt td {{ text-align:left; vertical-align:top; line-height:1.45; word-break:keep-all; overflow-wrap:break-word; font-size:.78rem; }}
 table.cc-t.txt td:first-child {{ width:22%; }}
+.cc-eq {{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; margin:4px 0 8px; }}
+.cc-eq .op {{ font-size:1.5rem; font-weight:700; color:#8AA597; }}
+.cc-eq .chip {{ background:#fff; border:1px solid {LINE}; border-radius:12px; padding:10px 16px; font-weight:700; color:{G9}; font-size:1.02rem; text-align:center; line-height:1.25; }}
+.cc-eq .chip small {{ display:block; font-weight:600; font-size:.74rem; color:#5B7A6B; }}
+.cc-eq .chip.g {{ background:{G1}; border-color:{G6}; }}
+.cc-eq .chip.big {{ background:{G6}; color:#fff; border-color:{G6}; font-size:1.1rem; }}
+.cc-eq .bars {{ background:#fff; border:1px solid {LINE}; border-radius:12px; padding:8px 10px 4px; text-align:center; }}
+.cc-eq .bars svg {{ width:210px; height:auto; display:block; }}
+.cc-eq .bars div {{ font-size:.74rem; color:#5B7A6B; font-weight:600; }}
+.cc-pb {{ display:flex; gap:10px; align-items:center; background:#FFF8E5; border-left:5px solid {GOLD}; border-radius:10px; padding:9px 14px; color:{G9}; font-weight:700; font-size:.95rem; margin:6px 0 4px; word-break:keep-all; }}
+.cc-note {{ color:#6F8A7B; font-size:.78rem; margin:0 0 16px 2px; }}
+.cc-flow {{ display:flex; flex-wrap:wrap; align-items:stretch; gap:8px 6px; margin:4px 0 8px; }}
+.cc-flow .fn {{ flex:1 1 150px; background:#fff; border:1px solid {LINE}; border-radius:14px; padding:12px 10px 10px; text-align:center; }}
+.cc-flow .fn svg {{ width:44px; height:44px; }}
+.cc-flow .fn b {{ display:block; color:{G9}; font-size:1rem; margin-top:2px; }}
+.cc-flow .fn span {{ display:block; color:#5B7A6B; font-size:.8rem; line-height:1.35; margin-top:2px; word-break:keep-all; }}
+.cc-flow .fn.y {{ border-color:{GOLD}; background:#FFFBEF; }}
+.cc-flow .ar {{ align-self:center; font-size:1.4rem; font-weight:700; color:#8AA597; }}
+.cc-safe {{ display:flex; align-items:center; gap:12px; background:#FDECEA; border-left:5px solid #D73027; border-radius:10px; padding:8px 14px; color:{G9}; font-size:.88rem; margin:6px 0 18px; word-break:keep-all; }}
+.cc-safe svg {{ width:30px; height:30px; flex:none; }}
+@media (max-width: 760px) {{ .cc-flow .ar {{ display:none; }} .cc-eq .bars svg {{ width:150px; }} }}
 .cc-ans {{ background:linear-gradient(180deg,#fff 0%,{G1} 100%); border:2px solid {G6}; border-radius:16px; padding:16px 20px; margin:0 0 14px; }}
 .cc-ans .k {{ font-size:.85rem; color:#5B7A6B; font-weight:700; }}
 .cc-ans .v {{ font-size:2.1rem; font-weight:800; color:{G9}; line-height:1.3; }}
@@ -178,6 +199,13 @@ TXT = {
                 "- 기상은 **기상청 일자료(ASOS 4~10월)**, 수확량은 통계청 시군별 논벼 단수(1996~2025)입니다.\n"
                 "- 관개·배수, 재배방식, 과거 피해는 아직 모델에 반영하지 않고 신뢰도 판정에만 사용합니다.\n"
                 "- 보험사 실제 가입·공제 자료로 재검증하기 전의 프로토타입입니다."),
+        eq_title="한국 쌀 보험, 이렇게 계산돼요", eq_cap="최근 5년 수확량 (예시 그림)", eq_bad="흉년", eq_avg="평균",
+        eq_base="기준수확량", eq_area="면적", eq_cov="보장수준", eq_cov_s="60~90%", eq_price="가격", eq_amt="가입금액",
+        eq_prob="문제: 흉년이 한 번 끼면 평균이 내려가 몇 해 동안 가입금액이 줄어요", eq_note="보험료의 일부는 국비로 지원돼요",
+        flow_title="ClimateCredit은 이렇게 보정해요",
+        flow=[("pin", "입력", "논 위치 · 이앙일", ""), ("cloud", "데이터", "기상청 · 통계청", ""), ("net", "모델", "날씨가 수확량에 준 영향", ""),
+              ("fix", "보정", "흉년을 평년 수확량으로", "y"), ("won", "결과", "보장수준별 가입금액", "y")],
+        safe_t="안전장치", safe_b="확인한 항목이 적으면 보정 없이 5개년 평균을 써요",
         ans_lab="{cov}% 보장 · {a:.1f}ha 기준 가입금액", ans_vs="5개년 평균 방식 {r:,.0f}원 대비 · 지급보험금이 아니라 가입 기준 금액이에요",
         ans_same="5개년 평균 방식과 같은 금액이에요 (보정 없음) · 지급보험금이 아니라 가입 기준 금액이에요",
         more_title="더 알아보기 (선택)",
@@ -284,6 +312,13 @@ TXT = {
                 "- Weather: **KMA ASOS daily data (Apr–Oct)**; yield: Statistics Korea county paddy-rice yield (1996–2025).\n"
                 "- Irrigation/drainage, cultivation method and past damage are not yet in the model; they only drive the confidence label.\n"
                 "- A prototype until re-validated with the insurer's own enrollment and claims data."),
+        eq_title="How Korea's rice insurance works", eq_cap="Yield, last 5 years (illustration)", eq_bad="bad year", eq_avg="average",
+        eq_base="Reference yield", eq_area="Area", eq_cov="Coverage", eq_cov_s="60-90%", eq_price="Price", eq_amt="Insured amount",
+        eq_prob="Problem: one bad-weather year pulls the average down and lowers the insured amount for years", eq_note="Part of the premium is paid by the government",
+        flow_title="How ClimateCredit adjusts it",
+        flow=[("pin", "Input", "Location · transplanting date", ""), ("cloud", "Data", "Weather · yield records", ""), ("net", "Model", "Weather's effect on yield", ""),
+              ("fix", "Adjust", "Bad year → normal-weather yield", "y"), ("won", "Result", "Insured amount by coverage", "y")],
+        safe_t="Safeguard", safe_b="If few items are verified, no adjustment: the 5-year average is used",
         ans_lab="Insured amount at {cov}% coverage · {a:.1f} ha", ans_vs="vs {r:,.0f} KRW with the 5-year average · the basis of cover, not a claim payout",
         ans_same="Same as the 5-year average (no adjustment) · the basis of cover, not a claim payout",
         more_title="Learn more (optional)",
@@ -365,7 +400,32 @@ with h2c:
     st.markdown(f"<div class='cc-tag'><span class='cc-pill'>{t['pill']}</span><b style='color:{G9}'>{t['tag']}</b><br>{t['sub']}</div>",
                 unsafe_allow_html=True)
 
-st.markdown(f"<div class='cc-prob'>{t['prob']}</div>", unsafe_allow_html=True)
+_C, _R, _Y = G6, "#D73027", GOLD
+ICON = {
+    "pin": f'<svg viewBox="0 0 48 48"><path d="M24 43s-13-11.5-13-21a13 13 0 0 1 26 0c0 9.5-13 21-13 21z" fill="none" stroke="{_C}" stroke-width="3"/><circle cx="24" cy="22" r="5" fill="{_C}"/></svg>',
+    "cloud": f'<svg viewBox="0 0 48 48"><path d="M14 36h21a8.5 8.5 0 0 0 0-17 11.5 11.5 0 0 0-22 3 7 7 0 0 0 1 14z" fill="none" stroke="{_C}" stroke-width="3" stroke-linejoin="round"/><path d="M18 42v3M26 42v3M34 42v3" stroke="{_C}" stroke-width="3" stroke-linecap="round"/></svg>',
+    "net": f'<svg viewBox="0 0 48 48"><g stroke="{_C}" stroke-width="2"><path d="M9 14L24 24M9 34L24 24M24 24L39 14M24 24L39 34M9 14V34"/></g><g fill="#fff" stroke="{_C}" stroke-width="3"><circle cx="9" cy="14" r="5"/><circle cx="9" cy="34" r="5"/><circle cx="24" cy="24" r="5"/><circle cx="39" cy="14" r="5"/><circle cx="39" cy="34" r="5"/></g></svg>',
+    "fix": f'<svg viewBox="0 0 48 48"><rect x="5" y="14" width="10" height="30" rx="2" fill="{_C}"/><rect x="19" y="14" width="10" height="30" rx="2" fill="none" stroke="{_Y}" stroke-width="2.5" stroke-dasharray="4 3"/><rect x="19" y="32" width="10" height="12" rx="2" fill="{_R}"/><rect x="33" y="14" width="10" height="30" rx="2" fill="{_C}"/><path d="M24 29V19M20 23l4-5 4 5" stroke="{_Y}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    "won": f'<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="19" fill="none" stroke="{_Y}" stroke-width="3"/><path d="M14 17l5 14 5-11 5 11 5-14M12 22h24M12 27h24" stroke="{_Y}" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    "shield": f'<svg viewBox="0 0 48 48"><path d="M24 5l15 5.5v11c0 10-6.5 17-15 21.5-8.5-4.5-15-11.5-15-21.5v-11z" fill="none" stroke="{_R}" stroke-width="3" stroke-linejoin="round"/><path d="M17 24l5 5 9-10" stroke="{_R}" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+}
+_hs = [72, 76, 40, 70, 74]
+_bars = "".join(f'<rect x="{10 + i * 38}" y="{104 - h}" width="26" height="{h}" rx="3" fill="{_R if i == 2 else _C}"/>' for i, h in enumerate(_hs))
+BARS = (f'<svg viewBox="0 0 272 122">{_bars}<line x1="4" x2="206" y1="38" y2="38" stroke="{GOLD}" stroke-width="2.5" stroke-dasharray="6 4"/>'
+        f'<text x="210" y="42" font-size="12" font-weight="700" fill="#A57A0E">{t["eq_avg"]}</text>'
+        f'<text x="99" y="58" font-size="12" font-weight="700" fill="{_R}" text-anchor="middle">{t["eq_bad"]}</text>'
+        f'<line x1="4" x2="268" y1="105" y2="105" stroke="{LINE}" stroke-width="1.5"/></svg>')
+st.markdown(
+    f"<div class='cc-sbt' style='font-size:1.05rem;margin-top:4px'>{t['eq_title']}</div>"
+    f"<div class='cc-eq'><div class='bars'>{BARS}<div>{t['eq_cap']}</div></div><span class='op'>→</span>"
+    f"<span class='chip g'>{t['eq_base']}</span><span class='op'>×</span><span class='chip'>{t['eq_area']}</span><span class='op'>×</span>"
+    f"<span class='chip'>{t['eq_cov']}<small>{t['eq_cov_s']}</small></span><span class='op'>×</span><span class='chip'>{t['eq_price']}</span>"
+    f"<span class='op'>=</span><span class='chip big'>{t['eq_amt']}</span></div>"
+    f"<div class='cc-pb'>{t['eq_prob']}</div><div class='cc-note'>{t['eq_note']}</div>", unsafe_allow_html=True)
+
+_fl = "<span class='ar'>›</span>".join(f"<div class='fn {k}'>{ICON[ic]}<b>{ti}</b><span>{sb}</span></div>" for ic, ti, sb, k in t["flow"])
+st.markdown(f"<div class='cc-sbt' style='font-size:1.05rem;margin-top:4px'>{t['flow_title']}</div><div class='cc-flow'>{_fl}</div>"
+            f"<div class='cc-safe'>{ICON['shield']}<div><b>{t['safe_t']}</b> · {t['safe_b']}</div></div>", unsafe_allow_html=True)
 left, right = st.columns([1, 2.1], gap="large")
 
 with left:
