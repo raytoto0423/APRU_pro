@@ -64,6 +64,13 @@ div[data-testid="stVerticalBlockBorderWrapper"] {{ background:#fff; border-color
 [data-testid="stMainBlockContainer"] > div[data-testid="stVerticalBlockBorderWrapper"] {{ padding: 1.6rem 2rem 1.4rem; box-shadow:0 2px 10px rgba(15,61,46,.06); }}
 table.cc-t {{ margin: 4px 2px 8px; width: calc(100% - 4px); }}
 table.cc-t th, table.cc-t td {{ border-left: none !important; border-right: none !important; }}
+table.cc-t tr.r80 td {{ background:{G1} !important; font-weight:700; }}
+table.cc-t.txt th, table.cc-t.txt td {{ text-align:left; vertical-align:top; line-height:1.45; word-break:keep-all; overflow-wrap:break-word; font-size:.78rem; }}
+table.cc-t.txt td:first-child {{ width:22%; }}
+.cc-ans {{ background:linear-gradient(180deg,#fff 0%,{G1} 100%); border:2px solid {G6}; border-radius:16px; padding:16px 20px; margin:0 0 14px; }}
+.cc-ans .k {{ font-size:.85rem; color:#5B7A6B; font-weight:700; }}
+.cc-ans .v {{ font-size:2.1rem; font-weight:800; color:{G9}; line-height:1.3; }}
+.cc-ans .s {{ font-size:.82rem; color:#5B7A6B; margin-top:2px; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -132,7 +139,7 @@ TXT = {
         sb_title="현재 구현 범위",
         sb1_k="지금 동작", sb1_v="선택한 위치와 이앙일로 기상청 일자료에서 생육 단계별 기상을 즉석에서 다시 계산 → 모델 예측 → 이상기후 해 대체 → 가입금액 비교",
         sb2_k="팀 가정", sb2_v="가입가격 {price:,}원/kg · 이상기후 해 판정 {thr:.0f}% · 대체 최대 {mx}개 · 상한 +{cap:.0f}%",
-        sb3_k="검증 범위", sb3_v="아래 정확도 숫자는 시군 단위로 미리 계산한 결과이며 입력값으로 다시 계산하지 않습니다. 농가 단위 수확량과 보험사 데이터 검증은 아직 하지 않았습니다.",
+        sb3_k="검증 범위", sb3_v="위의 정확도 숫자는 시군 단위로 미리 계산한 결과이며 입력값으로 다시 계산하지 않습니다. 농가 단위 수확량과 보험사 데이터 검증은 아직 하지 않았습니다.",
         sb4_k="알려진 한계", sb4_v="모델은 이앙일 6월 1일로 학습했습니다. 다른 이앙일은 기상 구간만 다시 계산하며, 그 예측 효과는 아직 검증하지 않았습니다.",
         conf_reason="체크리스트 {n}/6개 확인 · 관측소 {stn}", stn_own="동일 지역", stn_near="인접 지역",
         conf_note="신뢰도는 입력 확인 수준이며 예측 정확도를 뜻하지 않습니다.", sub="흥국화재 계리 담당자 검토용 · 쌀(논벼) · 전남 파일럿",
@@ -145,13 +152,13 @@ TXT = {
         items=["품종", "이앙일", "관개·배수", "논 위치", "재배방식", "과거 피해"], price="가입가격 (원/kg, 팀 가정)",
         year="가입 기준 연도 (직전 5년 이력 사용)",
         note="모델에 직접 반영되는 입력은 **논 위치(관측소)와 이앙일**(생육 단계별 기상 계산)이에요. 나머지 항목은 신뢰도 판정에 쓰이고, 모델 반영은 검증 후 단계로 남겨 뒀어요.",
-        h2="② 위치·이앙일에 따른 기상 노출과 보정 기준수확량", missing="이 시군은 최근 5년 기록이 부족해 5개년 평균을 그대로 사용합니다.",
+        h2="② 내 가입금액 — 보장수준별 예시 (지급보험금 아님)", missing="이 시군은 최근 5년 기록이 부족해 5개년 평균을 그대로 사용합니다.",
         m_reg="5개년 평균 (현행 방식)", m_adj="기상 보정 후", m_stn="가장 가까운 관측소", own=" · 동일 지역", near=" · 인접", m_conf="체크리스트 확인 수준",
         fb="확인 수준 Low (체크리스트 {n}/6개 확인, 보정에는 4개 이상 필요): 보정을 적용하지 않고 5개년 평균을 사용합니다.",
         replaced="**{ys}년**은 기상 영향이 컸던 해로 판정되어 **평년 날씨였다면의 수확량으로 대체**했습니다 (최근 5년 중 최대 {mx}개, 상한 +{cap:.0f}%).",
         noshock="최근 5년 중 기상 영향이 큰 해가 없어 5개년 평균과 같은 값을 사용합니다.",
         actual="실제 수확량", used="기준에 쓴 값", rep_lbl="평년 날씨 기준으로 대체한 해", wx="기상 효과", unit="kg/10a",
-        h3="③ 보장수준별 가입금액 예시 (지급보험금 아님)", cols=["보장수준", "5개년 평균 기준", "기상 보정 후", "차이", "국비 보험료 보조율"], won="원",
+        h3="③ 왜 이 금액인가요? 5개년 평균을 어떻게 보정했나", cols=["보장수준", "5개년 평균 기준", "기상 보정 후", "차이", "국비 보험료 보조율"], won="원",
         cap_amt="가입금액은 보장의 기준이 되는 금액이며 사고 때 받는 보험금이 아닙니다. 가입금액 = 기준수확량 × 면적({a:.1f}ha) × 보장수준 × 가입가격({p:,}원/kg, 팀 가정). 최종 금액은 계리 검토 후 확정됩니다.",
         h4="④ 검증",
         va_title="A. 예측 정확도 (연도 하나씩 빼고 예측)",
@@ -171,6 +178,41 @@ TXT = {
                 "- 기상은 **기상청 일자료(ASOS 4~10월)**, 수확량은 통계청 시군별 논벼 단수(1996~2025)입니다.\n"
                 "- 관개·배수, 재배방식, 과거 피해는 아직 모델에 반영하지 않고 신뢰도 판정에만 사용합니다.\n"
                 "- 보험사 실제 가입·공제 자료로 재검증하기 전의 프로토타입입니다."),
+        ans_lab="{cov}% 보장 · {a:.1f}ha 기준 가입금액", ans_vs="5개년 평균 방식 {r:,.0f}원 대비 · 지급보험금이 아니라 가입 기준 금액이에요",
+        ans_same="5개년 평균 방식과 같은 금액이에요 (보정 없음) · 지급보험금이 아니라 가입 기준 금액이에요",
+        more_title="더 알아보기 (선택)",
+        guide_title="각 항목은 무슨 뜻이고, 결과에 어떤 영향을 주나요?",
+        guide_cols=["항목", "무슨 뜻인가요", "결과에 미치는 영향"],
+        guide_rows=[
+            ("5개년 평균 (현행 방식)", "가입 직전 5년 동안 그 시군의 10a당 평균 수확량이에요. 가입금액 계산의 기준이 되는 '기준수확량'입니다.",
+             "값이 클수록 가입금액이 커져요. 날씨가 나쁜 해가 한 번 끼면 몇 해 동안 이 값이 낮아집니다."),
+            ("기상 보정 후", "5년 중 날씨 영향이 컸던 해(최대 {mx}개)를 '평년 날씨였다면의 수확량'으로 바꿔 다시 평균한 값이에요.",
+             "나쁜 날씨 때문에 낮아진 기준이 제자리로 돌아와 가입금액이 올라가요. 올라가는 폭은 최대 +{cap:.0f}%로 제한해요."),
+            ("기상 효과 (%)", "그해 생육 단계별 날씨가 평소와 달라서 수확량이 몇 % 오르거나 내렸는지 모델이 추정한 값이에요.",
+             "{thr:.0f}% 이하(크게 감소)면 '날씨 영향이 큰 해'로 보고 대체 대상이 돼요."),
+            ("논 위치 (시·군)", "가장 가까운 기상청 관측소를 찾는 데 쓰여요. 그 관측소의 일자료가 날씨 입력이 됩니다.",
+             "위치가 다르면 적용되는 날씨와 5개년 평균이 달라져요. 같은 이름의 관측소가 없으면 '인접'으로 표시하고 신뢰도가 한 단계 낮아질 수 있어요."),
+            ("이앙일", "모를 논에 옮겨 심은 날이에요. 이 날을 기준으로 분얼기·유수형성기·출수기·등숙기 4개 구간이 정해져요.",
+             "날짜가 바뀌면 각 구간에 들어가는 날씨가 달라져 기상 효과가 바뀌어요. 단, 모델은 6월 1일로 학습해서 다른 날짜의 정확도는 아직 검증 전이에요."),
+            ("체크리스트 확인 수준", "6개 입력 중 가입·공제 기록으로 확인된 개수예요.",
+             "4개 미만이면 Low로 보고 보정 없이 5개년 평균을 써요. 5개 이상이고 같은 지역 관측소면 High예요. 예측이 얼마나 맞는지가 아니라 입력을 얼마나 믿을 수 있는지를 뜻해요."),
+            ("품종·관개·재배방식·과거 피해", "논의 조건을 설명하는 항목이에요.",
+             "지금은 선택한 값 자체가 계산에 쓰이지 않고, '기록으로 확인했는지'만 신뢰도에 반영돼요. 모델 반영은 검증 후 단계예요."),
+            ("재배면적 (ha)", "가입하는 논의 넓이예요.", "가입금액은 면적에 정비례해요."),
+            ("가입가격 (원/kg)", "가입금액을 계산할 때 곱하는 kg당 가격이에요. 팀 가정값 {price:,}원입니다.",
+             "가입금액에 정비례해요. 실제 가입가격과 다를 수 있어요."),
+            ("보장수준 (60~90%)", "기준수확량의 몇 %까지를 보장 기준으로 삼을지예요.",
+             "높을수록 가입금액과 보험료가 커져요. 표의 가입금액 = 기준수확량 × 면적 × 보장수준 × 가격이에요."),
+            ("국비 보험료 보조율", "보험료 중 정부가 대신 내 주는 비율이에요. 보장수준이 높을수록 낮아져요(65%→33%).",
+             "가입금액 계산에는 쓰이지 않고 참고용으로 표시해요."),
+        ],
+        help_loc="가장 가까운 기상청 관측소를 찾는 데 쓰여요. 위치가 다르면 적용되는 날씨와 5개년 평균이 달라져요.",
+        help_cond="지금은 선택한 값 자체가 계산에 쓰이지 않아요. 아래 '기록으로 확인된 항목'에 체크했는지만 신뢰도에 반영돼요.",
+        help_tdate="이앙일을 기준으로 분얼기·유수형성기·출수기·등숙기 구간이 정해지고, 각 구간의 날씨가 모델 입력이 돼요.",
+        help_area="가입금액은 면적에 정비례해요.",
+        help_price="가입금액 = 기준수확량 × 면적 × 보장수준 × 가격. 팀 가정값이라 실제 가입가격과 다를 수 있어요.",
+        help_year="이 해 직전 5년의 수확량으로 5개년 평균을 만들어요. 예: 2025년이면 2020~2024년.",
+        help_ver="가입·공제 기록과 대조해 확인된 항목만 체크하세요. 4개 미만이면 보정을 적용하지 않아요.",
         foot="ClimateCredit · APRU 해커톤 프로토타입 · 데이터: 통계청(KOSIS), 기상청(ASOS)",
     ),
     "en": dict(
@@ -195,7 +237,7 @@ TXT = {
         sb_title="What this prototype does today",
         sb1_k="Working now", sb1_v="For the chosen location and transplanting date, weather by growth stage is recomputed live from KMA daily data → model prediction → shock-year replacement → insured-amount comparison.",
         sb2_k="Team assumptions", sb2_v="Price {price:,} KRW/kg · shock threshold {thr:.0f}% · at most {mx} replaced years · +{cap:.0f}% cap",
-        sb3_k="Validation scope", sb3_v="Accuracy figures below are pre-computed county-level results and are not re-run on your inputs. Farm-level yields and insurer data are not yet validated.",
+        sb3_k="Validation scope", sb3_v="Accuracy figures above are pre-computed county-level results and are not re-run on your inputs. Farm-level yields and insurer data are not yet validated.",
         sb4_k="Known limit", sb4_v="The model was trained with a fixed June 1 transplanting date. Other dates only shift the weather windows; their effect on accuracy is not yet validated.",
         conf_reason="{n}/6 checklist items verified · station {stn}", stn_own="same area", stn_near="nearby",
         conf_note="This level reflects input verification, not prediction accuracy.",
@@ -211,7 +253,7 @@ TXT = {
         price="Insured price (KRW/kg, team assumption)", year="Enrollment year (uses the previous 5 years)",
         note="Inputs used **directly by the model**: **field location (weather station) and transplanting date** (growth-stage weather). "
              "The other items only affect the confidence label for now; adding them to the model is a post-validation step.",
-        h2="② Weather exposure by location and transplanting date → adjusted reference yield",
+        h2="② Your insured amount by coverage level (illustrative, not a payout)",
         missing="Not enough yield history for this county, so the 5-year average is used.",
         m_reg="5-year average (current method)", m_adj="After weather adjustment", m_stn="Nearest weather station", own=" · same area", near=" · nearby",
         m_conf="Checklist verification level",
@@ -220,7 +262,7 @@ TXT = {
                  "(at most {mx} of the last 5 years, capped at +{cap:.0f}%).",
         noshock="No year in the last 5 had a large weather impact, so the adjusted value equals the 5-year average.",
         actual="Actual yield", used="Value used for reference yield", rep_lbl="Replaced with normal-weather yield", wx="weather effect", unit="kg/10a",
-        h3="③ Illustrative insured amount by coverage level (not a claim payout)",
+        h3="③ Why this amount? How the 5-year average was adjusted",
         cols=["Coverage", "5-year average basis", "After weather adjustment", "Difference", "Govt. premium subsidy"], won=" KRW",
         cap_amt="The insured amount is the basis of cover, not the amount paid in a claim. Insured amount = reference yield × area ({a:.1f} ha) × coverage × price ({p:,} KRW/kg, team assumption). Final figures are confirmed after actuarial review.",
         h4="④ Validation",
@@ -242,6 +284,41 @@ TXT = {
                 "- Weather: **KMA ASOS daily data (Apr–Oct)**; yield: Statistics Korea county paddy-rice yield (1996–2025).\n"
                 "- Irrigation/drainage, cultivation method and past damage are not yet in the model; they only drive the confidence label.\n"
                 "- A prototype until re-validated with the insurer's own enrollment and claims data."),
+        ans_lab="Insured amount at {cov}% coverage · {a:.1f} ha", ans_vs="vs {r:,.0f} KRW with the 5-year average · the basis of cover, not a claim payout",
+        ans_same="Same as the 5-year average (no adjustment) · the basis of cover, not a claim payout",
+        more_title="Learn more (optional)",
+        guide_title="What does each item mean, and how does it affect the result?",
+        guide_cols=["Item", "What it means", "How it affects the result"],
+        guide_rows=[
+            ("5-year average (current method)", "The county's average yield per 10 ares over the 5 years before enrollment. This is the 'reference yield' on which the insured amount is based.",
+             "A higher value means a higher insured amount. One bad-weather year pulls it down for several years."),
+            ("After weather adjustment", "The 5-year average recomputed after replacing years with a large weather impact (at most {mx}) by the yield expected under normal weather.",
+             "The reference yield that bad weather pushed down is restored, so the insured amount rises. The rise is capped at +{cap:.0f}%."),
+            ("Weather effect (%)", "How many percent the model estimates that year's growth-stage weather raised or lowered the yield compared with normal.",
+             "At {thr:.0f}% or lower (a large drop) the year counts as a large weather impact and becomes a candidate for replacement."),
+            ("Field location (city / county)", "Used to find the nearest KMA weather station. That station's daily data is the weather input.",
+             "A different location means different weather and a different 5-year average. If no station has the same name it is marked 'nearby', which can lower the confidence level."),
+            ("Transplanting date", "The day seedlings were planted in the field. It fixes four growth-stage windows: tillering, panicle initiation, heading and ripening.",
+             "A different date puts different weather into each window and changes the weather effect. The model was trained with June 1, so other dates are not yet validated."),
+            ("Checklist verification level", "How many of the 6 inputs are verified against enrollment or claims records.",
+             "Fewer than 4 means Low: no adjustment, the 5-year average is used. 5 or more with a same-area station means High. It says how far the inputs can be trusted, not how accurate the prediction is."),
+            ("Variety, irrigation, method, past damage", "Items that describe field conditions.",
+             "For now the chosen value is not used in the calculation; only whether it was verified against records counts toward confidence. Adding them to the model is a post-validation step."),
+            ("Paddy area (ha)", "The size of the field to be insured.", "The insured amount is proportional to area."),
+            ("Insured price (KRW/kg)", "The per-kg price multiplied in the calculation. Team assumption: {price:,} KRW.",
+             "The insured amount is proportional to it. It may differ from the actual insured price."),
+            ("Coverage level (60-90%)", "What share of the reference yield is taken as the basis of cover.",
+             "Higher means a larger insured amount and premium. Insured amount = reference yield × area × coverage × price."),
+            ("Govt. premium subsidy", "The share of the premium the government pays on the farmer's behalf. It falls as coverage rises (65% to 33%).",
+             "Not used in the insured-amount calculation; shown for reference."),
+        ],
+        help_loc="Used to find the nearest weather station. A different location means different weather and a different 5-year average.",
+        help_cond="The chosen value is not used in the calculation for now. Only whether you tick it under 'Items verified against records' counts toward confidence.",
+        help_tdate="The date fixes the tillering, panicle-initiation, heading and ripening windows; the weather in each window is the model input.",
+        help_area="The insured amount is proportional to area.",
+        help_price="Insured amount = reference yield × area × coverage × price. A team assumption, so it may differ from the actual insured price.",
+        help_year="The 5-year average uses the 5 years before this year. Example: 2025 uses 2020-2024.",
+        help_ver="Tick only items that can be checked against enrollment/claims records. With fewer than 4, no adjustment is applied.",
         foot="ClimateCredit · APRU hackathon prototype · Data: Statistics Korea (KOSIS), Korea Meteorological Administration (ASOS)",
     ),
 }
@@ -296,25 +373,25 @@ with left:
         sec(t["h1"])
         skip = {"전라남도", "광주광역시", "울산광역시", "인천광역시", "제주도"}   # too little history / too little paddy for this model
         provs = ["전라남도"] + sorted({p for (p, _) in eng.cmap if p not in skip})
-        prov = st.selectbox(t["prov"], provs, index=0, format_func=disp_prov)
+        prov = st.selectbox(t["prov"], provs, index=0, format_func=disp_prov, help=t["help_loc"])
         cl = eng.counties(prov)
         county = st.selectbox(t["county"], cl, index=cl.index("영광군") if "영광군" in cl else 0, format_func=disp, key=f"county_{prov}")
         if prov != "전라남도":
             st.caption(t["other_prov"])
-        st.selectbox(t["variety"], t["varieties"], index=2)
-        st.markdown(f"**{t['tdate']}**")
+        st.selectbox(t["variety"], t["varieties"], index=2, help=t["help_cond"])
+        st.markdown(f"**{t['tdate']}**", help=t["help_tdate"])
         mc1, mc2 = st.columns(2)
         t_month = mc1.selectbox(t["tmonth"], [5, 6], index=1, format_func=lambda m: (f"{m}월" if L == "ko" else ["", "", "", "", "", "May", "Jun"][m]))
         t_day = mc2.selectbox(t["tday"], list(range(1, 32 if t_month == 5 else 31)), index=0)
-        st.selectbox(t["irrig"], t["irrigs"])
-        st.selectbox(t["method"], t["methods"])
-        st.slider(t["past"], 0, 5, 1)
-        area = st.number_input(t["area"], 0.1, 50.0, 1.0, 0.1)
-        st.markdown(t["verified"])
+        st.selectbox(t["irrig"], t["irrigs"], help=t["help_cond"])
+        st.selectbox(t["method"], t["methods"], help=t["help_cond"])
+        st.slider(t["past"], 0, 5, 1, help=t["help_cond"])
+        area = st.number_input(t["area"], 0.1, 50.0, 1.0, 0.1, help=t["help_area"])
+        st.markdown(t["verified"], help=t["help_ver"])
         cols = st.columns(2)
         verified = [cols[i % 2].checkbox(lab, value=True, key=f"v{i}") for i, lab in enumerate(t["items"])]
-        price = st.number_input(t["price"], 1000, 5000, DEFAULT_PRICE, 50)
-        target_year = st.selectbox(t["year"], [2025, 2026, 2024, 2023, 2022], index=0)
+        price = st.number_input(t["price"], 1000, 5000, DEFAULT_PRICE, 50, help=t["help_price"])
+        target_year = st.selectbox(t["year"], [2025, 2026, 2024, 2023, 2022], index=0, help=t["help_year"])
         st.caption(t["note"])
 
 md = (t_month, t_day)
@@ -325,6 +402,28 @@ with right:
     if "regional_base" not in q:
         st.markdown(f"<div class='cc-call warn'>{t['missing']}</div>", unsafe_allow_html=True)
     else:
+        # ---- answer first: insured amount by coverage level ----
+        tb = pd.DataFrame(q["table"])
+        r80 = tb[tb["coverage"] == 80].iloc[0] if (tb["coverage"] == 80).any() else tb.iloc[len(tb) // 2]
+        d80 = float(r80["diff"])
+        vs = t["ans_vs"].format(r=r80["regional_amt"]) if d80 > 0.5 else t["ans_same"]
+        dl = f"<span class='cc-delta' style='font-size:1rem'>▲ {d80:,.0f}{t['won']}</span>" if d80 > 0.5 else ""
+        st.markdown(f"<div class='cc-ans'><div class='k'>{t['ans_lab'].format(cov=int(r80['coverage']), a=area)}</div>"
+                    f"<div class='v'>{r80['personal_amt']:,.0f}{t['won']} {dl}</div><div class='s'>{vs}</div></div>", unsafe_allow_html=True)
+        rows = ""
+        for _, r in tb.iterrows():
+            pos = "pos" if r["diff"] > 0 else ""
+            cls = " class='r80'" if int(r["coverage"]) == int(r80["coverage"]) else ""
+            rows += (f"<tr{cls}><td><b>{int(r['coverage'])}%</b></td><td>{r['regional_amt']:,.0f}{t['won']}</td>"
+                     f"<td><b>{r['personal_amt']:,.0f}{t['won']}</b></td><td class='{pos}'>{r['diff']:+,.0f}{t['won']}</td>"
+                     f"<td>{int(r['subsidy_pct'])}%</td></tr>")
+        head = "".join(f"<th>{c}</th>" for c in t["cols"])
+        st.markdown(f"<table class='cc-t'><tr>{head}</tr>{rows}</table>", unsafe_allow_html=True)
+        st.caption(t["cap_amt"].format(a=area, p=price))
+        st.write("")
+
+        # ---- basis: how the reference yield was adjusted ----
+        sec(t["h3"])
         conf = q["confidence"]
         bcol = {"High": G6, "Medium": GOLD, "Low": "#D73027"}[conf]
         sn = q["station_name"]
@@ -351,14 +450,6 @@ with right:
             st.markdown(f"<div class='cc-call'>{msg}</div>", unsafe_allow_html=True)
         else:
             st.markdown(f"<div class='cc-call warn'>{t['noshock']}</div>", unsafe_allow_html=True)
-
-        sb2 = t["sb2_v"].format(price=price, thr=SHOCK_EFFECT_PCT, mx=MAX_REPLACED, cap=UPLIFT_CAP_PCT)
-        st.markdown(
-            f"<div class='cc-sbt'>{t['sb_title']}</div><div class='cc-sb'>"
-            f"<div class='cc-sbi g'><b>{t['sb1_k']}</b>{t['sb1_v']}</div>"
-            f"<div class='cc-sbi y'><b>{t['sb2_k']}</b>{sb2}</div>"
-            f"<div class='cc-sbi r'><b>{t['sb3_k']}</b>{t['sb3_v']}</div>"
-            f"<div class='cc-sbi r'><b>{t['sb4_k']}</b>{t['sb4_v']}</div></div>", unsafe_allow_html=True)
 
         yrs = q["years"]
         fig, ax = plt.subplots(figsize=(7.4, 3.5))
@@ -389,7 +480,14 @@ with right:
         with st.container(border=True):
             st.pyplot(fig)
 
-        with st.expander(t["vx_title"], expanded=True):
+        st.markdown(f"<div class='cc-subh' style='margin:14px 0 6px'>{t['more_title']}</div>", unsafe_allow_html=True)
+        with st.expander(t["guide_title"], expanded=False):
+            fm = dict(thr=SHOCK_EFFECT_PCT, mx=MAX_REPLACED, cap=UPLIFT_CAP_PCT, price=DEFAULT_PRICE)
+            ghd = "".join(f"<th>{c}</th>" for c in t["guide_cols"])
+            gbody = "".join(f"<tr><td><b>{a}</b></td><td>{b.format(**fm)}</td><td>{c.format(**fm)}</td></tr>" for a, b, c in t["guide_rows"])
+            st.markdown(f"<table class='cc-t sm txt'><tr>{ghd}</tr>{gbody}</table>", unsafe_allow_html=True)
+
+        with st.expander(t["vx_title"], expanded=False):
             st.markdown(f"<div style='font-size:.85rem;color:#2F5A49;margin-bottom:6px'>{t['vx_how']}</div>", unsafe_allow_html=True)
             ey = st.selectbox(t["vx_year"], yrs, index=int(np.argmin(q["effect_pct"])), key=f"exy_{prov}_{county}_{target_year}_{md}")
             cbs = st.columns(4)
@@ -478,18 +576,6 @@ with right:
                     st.markdown(f"<table class='cc-t sm'><tr>{hd}</tr>{body}</table>", unsafe_allow_html=True)
                 st.caption(t["ex_note"])
 
-        sec(t["h3"])
-        tb = pd.DataFrame(q["table"])
-        rows = ""
-        for _, r in tb.iterrows():
-            pos = "pos" if r["diff"] > 0 else ""
-            rows += (f"<tr><td><b>{int(r['coverage'])}%</b></td><td>{r['regional_amt']:,.0f}{t['won']}</td>"
-                     f"<td><b>{r['personal_amt']:,.0f}{t['won']}</b></td><td class='{pos}'>{r['diff']:+,.0f}{t['won']}</td>"
-                     f"<td>{int(r['subsidy_pct'])}%</td></tr>")
-        head = "".join(f"<th>{c}</th>" for c in t["cols"])
-        st.markdown(f"<table class='cc-t'><tr>{head}</tr>{rows}</table>", unsafe_allow_html=True)
-        st.caption(t["cap_amt"].format(a=area, p=price))
-
 st.write("")
 sec(t["h4"])
 sc = res["scores"]
@@ -516,6 +602,13 @@ if bt is not None:
     b[2].markdown(card(t["vb3"], f"{r.er.mean():.1f} → {r.ea.mean():.1f}", "kg/10a", small=True), unsafe_allow_html=True)
     b[3].markdown(card(t["vb4"], f"{100 * (r.adjusted / r.regional - 1).mean():+.1f}", "%"), unsafe_allow_html=True)
     st.caption(t["vb_note"].format(c=closer, n=len(r)))
+sb2 = t["sb2_v"].format(price=price, thr=SHOCK_EFFECT_PCT, mx=MAX_REPLACED, cap=UPLIFT_CAP_PCT)
+st.markdown(
+    f"<div class='cc-sbt' style='margin-top:14px'>{t['sb_title']}</div><div class='cc-sb'>"
+    f"<div class='cc-sbi g'><b>{t['sb1_k']}</b>{t['sb1_v']}</div>"
+    f"<div class='cc-sbi y'><b>{t['sb2_k']}</b>{sb2}</div>"
+    f"<div class='cc-sbi r'><b>{t['sb3_k']}</b>{t['sb3_v']}</div>"
+    f"<div class='cc-sbi r'><b>{t['sb4_k']}</b>{t['sb4_v']}</div></div>", unsafe_allow_html=True)
 with st.expander(t["exp"]):
     st.markdown(t["assume"].format(thr=SHOCK_EFFECT_PCT, mx=MAX_REPLACED, cap=UPLIFT_CAP_PCT))
 st.markdown(f"<div class='cc-foot'>{t['foot']}</div>", unsafe_allow_html=True)
