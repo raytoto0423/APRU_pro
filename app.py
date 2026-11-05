@@ -384,7 +384,10 @@ disp_prov = (lambda p: EN_PROV.get(p, p)) if L == "en" else (lambda p: p)
 with h1c:
     st.image(os.path.join(ASSETS, "logo.png"), width=300)
 with h3c:
-    st.page_link("pages/farmer.py", label=t["to_farmer"])
+    try:
+        st.page_link("pages/farmer.py", label=t["to_farmer"])
+    except Exception:          # page list not refreshed yet (e.g. right after a deploy): fall back to a plain link
+        st.markdown(f"<a href='/farmer' target='_self' style='font-weight:700'>{t['to_farmer']}</a>", unsafe_allow_html=True)
 with h2c:
     st.markdown(f"<div class='cc-tag'><span class='cc-pill'>{t['pill']}</span><b style='color:{G9}'>{t['tag']}</b><br>{t['sub']}</div>",
                 unsafe_allow_html=True)

@@ -144,7 +144,10 @@ t = TXT[L]
 disp = en if L == "en" else (lambda c: c)
 disp_prov = (lambda p: EN_PROV.get(p, p)) if L == "en" else (lambda p: p)
 
-st.page_link("app.py", label=t["back"])
+try:
+    st.page_link("app.py", label=t["back"])
+except Exception:
+    st.markdown(f"<a href='/' target='_self' style='font-weight:700'>{t['back']}</a>", unsafe_allow_html=True)
 st.markdown(f"<div class='fm-title'>{t['title']}</div><div class='fm-sub'>{t['sub']}</div>", unsafe_allow_html=True)
 
 eng = get_engine()
