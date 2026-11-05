@@ -372,7 +372,7 @@ def card(label, value, unit="", delta=None, hl=False, sub="", small=False):
 eng = get_engine()
 res = json.load(open(os.path.join(HERE, "data", "results.json"), encoding="utf-8"))
 
-qp_lang = st.query_params.get("lang", "ko")
+qp_lang = st.query_params.get("lang") or st.session_state.get("_lang", "ko")   # keep the language chosen on the farmer page
 h1c, h2c, h3c = st.columns([2.4, 5, 1.6])
 with h3c:
     lang_label = st.radio("Language / 언어", ["한국어", "English"], index=1 if qp_lang == "en" else 0, horizontal=True)
