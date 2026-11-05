@@ -47,7 +47,7 @@ TXT = {
         sub="흥국화재 계리 담당자 검토용 시제품 · 쌀(논벼) · 전남 파일럿",
         h1="① 가입 체크리스트", prov="논 위치 ① 도·광역시", county="논 위치 ② 시·군", variety="품종",
         other_prov="전남 외 지역은 같은 모델로 계산한 참고용이며, 파일럿 검증은 전남에서 했습니다.",
-        varieties=["조생종", "중생종", "중만생종"], tdate="이앙일", irrig="관개·배수", irrigs=["양호", "보통", "불량"],
+        varieties=["조생종", "중생종", "중만생종"], tdate="이앙일 (월·일만 사용, 연도 무관)", tmonth="월", tday="일", irrig="관개·배수", irrigs=["양호", "보통", "불량"],
         method="재배방식", methods=["기계이앙", "손이앙", "직파"], past="최근 5년 피해 경험 (회)", area="재배면적 (ha)",
         verified="**기록으로 확인된 항목** (가입·공제 기록과 대조 가능한 것만 체크)",
         items=["품종", "이앙일", "관개·배수", "논 위치", "재배방식", "과거 피해"], price="가입가격 (원/kg, 팀 가정)",
@@ -77,7 +77,7 @@ TXT = {
         sub="Prototype for Heungkuk Fire & Marine actuaries · Rice (paddy) · Jeonnam pilot",
         h1="① Enrollment checklist", prov="Field location ① Province", county="Field location ② City / county", variety="Rice variety",
         other_prov="Outside Jeonnam the same model is applied for reference only; the pilot was validated in Jeonnam.",
-        varieties=["Early-maturing", "Mid-maturing", "Mid-late maturing"], tdate="Transplanting date", irrig="Irrigation / drainage",
+        varieties=["Early-maturing", "Mid-maturing", "Mid-late maturing"], tdate="Transplanting date (month/day only, year not used)", tmonth="Month", tday="Day", irrig="Irrigation / drainage",
         irrigs=["Good", "Fair", "Poor"], method="Cultivation method", methods=["Machine transplant", "Hand transplant", "Direct seeding"],
         past="Damage events in the last 5 years", area="Paddy area (ha)",
         verified="**Items verified against records** (tick only what can be checked against enrollment/claims records)",
@@ -151,7 +151,10 @@ with left:
     if prov != "전라남도":
         st.caption(t["other_prov"])
     st.selectbox(t["variety"], t["varieties"], index=2)
-    d = st.date_input(t["tdate"], value=dt.date(2025, 6, 1), min_value=dt.date(2025, 5, 1), max_value=dt.date(2025, 6, 30))
+    st.markdown(f"**{t['tdate']}**")
+    mc1, mc2 = st.columns(2)
+    t_month = mc1.selectbox(t["tmonth"], [5, 6], index=1, format_func=lambda m: (f"{m}월" if L == "ko" else ["", "", "", "", "", "May", "Jun"][m]))
+    t_day = mc2.selectbox(t["tday"], list(range(1, 32 if t_month == 5 else 31)), index=0)
     st.selectbox(t["irrig"], t["irrigs"])
     st.selectbox(t["method"], t["methods"])
     st.slider(t["past"], 0, 5, 1)
@@ -163,7 +166,7 @@ with left:
     target_year = st.selectbox(t["year"], [2025, 2026, 2024, 2023, 2022], index=0)
     st.caption(t["note"])
 
-md = (d.month, d.day)
+md = (t_month, t_day)
 q = eng.quote(prov, county, target_year, md, sum(verified), 6, area, price)
 
 with right:
