@@ -32,7 +32,7 @@ header[data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecor
             height:152px; display:flex; flex-direction:column; justify-content:flex-start; box-sizing:border-box; overflow:hidden; }}
 .cc-card .cc-lab {{ min-height:2.4em; line-height:1.2; }}
 .cc-sub {{ font-size:.78rem; color:#5B7A6B; margin-top:2px; }}
-.cc-val.sm {{ font-size:1.3rem; white-space:normal; word-break:break-word; line-height:1.2; }}
+.cc-val.sm {{ font-size:1.12rem; white-space:normal; word-break:break-word; line-height:1.2; }}
 .cc-card.hl {{ border:2px solid {G6}; background:linear-gradient(180deg,#fff 0%,{G1} 100%); }}
 .cc-lab {{ font-size:.78rem; color:#5B7A6B; font-weight:600; }}
 .cc-val {{ font-size:1.8rem; font-weight:800; color:{G9}; line-height:1.25; }}
@@ -164,7 +164,7 @@ TXT = {
         sb4_k="알려진 한계", sb4_v="모델은 이앙일 6월 1일로 학습했습니다. 다른 이앙일은 기상 구간만 다시 계산하며, 그 예측 효과는 아직 검증하지 않았습니다.",
         conf_reason="체크리스트 {n}/6개 확인 · 관측소 {stn}", stn_own="동일 지역", stn_near="인접 지역",
         conf_note="신뢰도는 입력 확인 수준이며 예측 정확도를 뜻하지 않습니다.", sub="흥국화재 계리 담당자 검토용 · 쌀(논벼) · 전남 파일럿",
-        h1="① 가입 체크리스트", prov="논 위치 ① 도·광역시", county="논 위치 ② 시·군", variety="품종 (숙기)",
+        h1="② 가입 체크리스트", prov="논 위치 ① 도·광역시", county="논 위치 ② 시·군", variety="품종 (숙기)",
         other_prov="전남 외 지역은 같은 모델로 계산한 참고용이며, 파일럿 검증은 전남에서 했습니다.",
         varieties=["조생종", "중생종", "중만생종"], tdate="이앙일 (월·일만 사용, 연도 무관)", tmonth="월", tday="일",
         irrig="관개·배수", irrigs=["양호", "보통", "불량"],
@@ -173,7 +173,7 @@ TXT = {
         items=["품종", "이앙일", "관개·배수", "논 위치", "재배방식", "과거 피해"], price="가입가격 (원/kg, 팀 가정)",
         year="가입 기준 연도 (직전 5년 이력 사용)",
         note="모델에 직접 반영되는 입력은 **논 위치(관측소)와 이앙일**(생육 단계별 기상 계산)이에요. 나머지 항목은 신뢰도 판정에 쓰이고, 모델 반영은 검증 후 단계로 남겨 뒀어요.",
-        h2="② 내 가입금액 — 보장수준별 예시 (지급보험금 아님)", missing="이 시군은 최근 5년 기록이 부족해 5개년 평균을 그대로 사용합니다.",
+        h2="① 내 가입금액 — 보장수준별 예시 (지급보험금 아님)", missing="이 시군은 최근 5년 기록이 부족해 5개년 평균을 그대로 사용합니다.",
         m_reg="5개년 평균 (현행 방식)", m_adj="기상 보정 후", m_stn="가장 가까운 관측소", own=" · 동일 지역", near=" · 인접", m_conf="체크리스트 확인 수준",
         fb="확인 수준 Low (체크리스트 {n}/6개 확인, 보정에는 4개 이상 필요): 보정을 적용하지 않고 5개년 평균을 사용합니다.",
         replaced="**{ys}년**은 기상 영향이 컸던 해로 판정되어 **평년 날씨였다면의 수확량으로 대체**했습니다 (최근 5년 중 최대 {mx}개, 상한 +{cap:.0f}%).",
@@ -199,6 +199,7 @@ TXT = {
                 "- 기상은 **기상청 일자료(ASOS 4~10월)**, 수확량은 통계청 시군별 논벼 단수(1996~2025)입니다.\n"
                 "- 관개·배수, 재배방식, 과거 피해는 아직 모델에 반영하지 않고 신뢰도 판정에만 사용합니다.\n"
                 "- 보험사 실제 가입·공제 자료로 재검증하기 전의 프로토타입입니다."),
+        intro_exp="서비스 소개 — 한국 쌀 보험 구조와 ClimateCredit 보정 방식",
         eq_title="한국 쌀 보험, 이렇게 계산돼요", eq_cap="최근 5년 수확량 (예시 그림)", eq_bad="흉년", eq_avg="평균",
         eq_base="기준수확량", eq_area="면적", eq_cov="보장수준", eq_cov_s="60~90%", eq_price="가격", eq_amt="가입금액",
         eq_prob="문제: 흉년이 한 번 끼면 평균이 내려가 몇 해 동안 가입금액이 줄어요", eq_note="보험료의 일부는 국비로 지원돼요",
@@ -270,7 +271,7 @@ TXT = {
         conf_reason="{n}/6 checklist items verified · station {stn}", stn_own="same area", stn_near="nearby",
         conf_note="This level reflects input verification, not prediction accuracy.",
         sub="For Heungkuk Fire & Marine actuaries · Rice (paddy) · Jeonnam pilot",
-        h1="① Enrollment checklist", prov="Field location ① Province", county="Field location ② City / county", variety="Rice maturity group",
+        h1="② Enrollment checklist", prov="Field location ① Province", county="Field location ② City / county", variety="Rice maturity group",
         other_prov="Outside Jeonnam the same model is applied for reference only; the pilot was validated in Jeonnam.",
         varieties=["Early-maturing", "Mid-maturing", "Mid-late maturing"], tdate="Transplanting date (month/day only, year not used)",
         tmonth="Month", tday="Day", irrig="Irrigation / drainage",
@@ -281,7 +282,7 @@ TXT = {
         price="Insured price (KRW/kg, team assumption)", year="Enrollment year (uses the previous 5 years)",
         note="Inputs used **directly by the model**: **field location (weather station) and transplanting date** (growth-stage weather). "
              "The other items only affect the confidence label for now; adding them to the model is a post-validation step.",
-        h2="② Your insured amount by coverage level (illustrative, not a payout)",
+        h2="① Your insured amount by coverage level (illustrative, not a payout)",
         missing="Not enough yield history for this county, so the 5-year average is used.",
         m_reg="5-year average (current method)", m_adj="After weather adjustment", m_stn="Nearest weather station", own=" · same area", near=" · nearby",
         m_conf="Checklist verification level",
@@ -312,6 +313,7 @@ TXT = {
                 "- Weather: **KMA ASOS daily data (Apr–Oct)**; yield: Statistics Korea county paddy-rice yield (1996–2025).\n"
                 "- Irrigation/drainage, cultivation method and past damage are not yet in the model; they only drive the confidence label.\n"
                 "- A prototype until re-validated with the insurer's own enrollment and claims data."),
+        intro_exp="Introduction — how Korea's rice insurance works and how ClimateCredit adjusts it",
         eq_title="How Korea's rice insurance works", eq_cap="Yield, last 5 years (illustration)", eq_bad="bad year", eq_avg="average",
         eq_base="Reference yield", eq_area="Area", eq_cov="Coverage", eq_cov_s="60-90%", eq_price="Price", eq_amt="Insured amount",
         eq_prob="Problem: one bad-weather year pulls the average down and lowers the insured amount for years", eq_note="Part of the premium is paid by the government",
@@ -415,21 +417,24 @@ BARS = (f'<svg viewBox="0 0 272 122">{_bars}<line x1="4" x2="206" y1="38" y2="38
         f'<text x="210" y="42" font-size="12" font-weight="700" fill="#A57A0E">{t["eq_avg"]}</text>'
         f'<text x="99" y="58" font-size="12" font-weight="700" fill="{_R}" text-anchor="middle">{t["eq_bad"]}</text>'
         f'<line x1="4" x2="268" y1="105" y2="105" stroke="{LINE}" stroke-width="1.5"/></svg>')
-st.markdown(
-    f"<div class='cc-sbt' style='font-size:1.05rem;margin-top:4px'>{t['eq_title']}</div>"
-    f"<div class='cc-eq'><div class='bars'>{BARS}<div>{t['eq_cap']}</div></div><span class='op'>→</span>"
-    f"<span class='chip g'>{t['eq_base']}</span><span class='op'>×</span><span class='chip'>{t['eq_area']}</span><span class='op'>×</span>"
-    f"<span class='chip'>{t['eq_cov']}<small>{t['eq_cov_s']}</small></span><span class='op'>×</span><span class='chip'>{t['eq_price']}</span>"
-    f"<span class='op'>=</span><span class='chip big'>{t['eq_amt']}</span></div>"
-    f"<div class='cc-pb'>{t['eq_prob']}</div><div class='cc-note'>{t['eq_note']}</div>", unsafe_allow_html=True)
+with st.expander(t["intro_exp"], expanded=False):
+    st.markdown(
+        f"<div class='cc-sbt' style='font-size:1.05rem;margin-top:4px'>{t['eq_title']}</div>"
+        f"<div class='cc-eq'><div class='bars'>{BARS}<div>{t['eq_cap']}</div></div><span class='op'>→</span>"
+        f"<span class='chip g'>{t['eq_base']}</span><span class='op'>×</span><span class='chip'>{t['eq_area']}</span><span class='op'>×</span>"
+        f"<span class='chip'>{t['eq_cov']}<small>{t['eq_cov_s']}</small></span><span class='op'>×</span><span class='chip'>{t['eq_price']}</span>"
+        f"<span class='op'>=</span><span class='chip big'>{t['eq_amt']}</span></div>"
+        f"<div class='cc-pb'>{t['eq_prob']}</div><div class='cc-note'>{t['eq_note']}</div>", unsafe_allow_html=True)
 
-_fl = "<span class='ar'>›</span>".join(f"<div class='fn {k}'>{ICON[ic]}<b>{ti}</b><span>{sb}</span></div>" for ic, ti, sb, k in t["flow"])
-st.markdown(f"<div class='cc-sbt' style='font-size:1.05rem;margin-top:4px'>{t['flow_title']}</div><div class='cc-flow'>{_fl}</div>"
-            f"<div class='cc-safe'>{ICON['shield']}<div><b>{t['safe_t']}</b> · {t['safe_b']}</div></div>", unsafe_allow_html=True)
+    _fl = "<span class='ar'>›</span>".join(f"<div class='fn {k}'>{ICON[ic]}<b>{ti}</b><span>{sb}</span></div>" for ic, ti, sb, k in t["flow"])
+    st.markdown(f"<div class='cc-sbt' style='font-size:1.05rem;margin-top:4px'>{t['flow_title']}</div><div class='cc-flow'>{_fl}</div>"
+                f"<div class='cc-safe'>{ICON['shield']}<div><b>{t['safe_t']}</b> · {t['safe_b']}</div></div>", unsafe_allow_html=True)
+CHECKLIST_H = 960
+ans_box = st.container()          # filled after the inputs are read, but shown first
 left, right = st.columns([1, 2.1], gap="large")
 
 with left:
-    with st.container(border=True):
+    with st.container(height=CHECKLIST_H, border=True):   # scrolls inside; height matches the end of section 3
         sec(t["h1"])
         skip = {"전라남도", "광주광역시", "울산광역시", "인천광역시", "제주도"}   # too little history / too little paddy for this model
         provs = ["전라남도"] + sorted({p for (p, _) in eng.cmap if p not in skip})
@@ -457,19 +462,20 @@ with left:
 md = (t_month, t_day)
 q = eng.quote(prov, county, target_year, md, sum(verified), 6, area, price)
 
-with right:
+with ans_box:
     sec(t["h2"])
     if "regional_base" not in q:
         st.markdown(f"<div class='cc-call warn'>{t['missing']}</div>", unsafe_allow_html=True)
     else:
-        # ---- answer first: insured amount by coverage level ----
         tb = pd.DataFrame(q["table"])
         r80 = tb[tb["coverage"] == 80].iloc[0] if (tb["coverage"] == 80).any() else tb.iloc[len(tb) // 2]
         d80 = float(r80["diff"])
         vs = t["ans_vs"].format(r=r80["regional_amt"]) if d80 > 0.5 else t["ans_same"]
         dl = f"<span class='cc-delta' style='font-size:1rem'>▲ {d80:,.0f}{t['won']}</span>" if d80 > 0.5 else ""
-        st.markdown(f"<div class='cc-ans'><div class='k'>{t['ans_lab'].format(cov=int(r80['coverage']), a=area)}</div>"
-                    f"<div class='v'>{r80['personal_amt']:,.0f}{t['won']} {dl}</div><div class='s'>{vs}</div></div>", unsafe_allow_html=True)
+        ac, tc = st.columns([1, 1.9], gap="large")
+        with ac:
+            st.markdown(f"<div class='cc-ans' style='min-height:284px;margin:0;display:flex;flex-direction:column;justify-content:center'><div class='k'>{t['ans_lab'].format(cov=int(r80['coverage']), a=area)}</div>"
+                        f"<div class='v'>{r80['personal_amt']:,.0f}{t['won']}</div><div>{dl}</div><div class='s'>{vs}</div></div>", unsafe_allow_html=True)
         rows = ""
         for _, r in tb.iterrows():
             pos = "pos" if r["diff"] > 0 else ""
@@ -478,10 +484,13 @@ with right:
                      f"<td><b>{r['personal_amt']:,.0f}{t['won']}</b></td><td class='{pos}'>{r['diff']:+,.0f}{t['won']}</td>"
                      f"<td>{int(r['subsidy_pct'])}%</td></tr>")
         head = "".join(f"<th>{c}</th>" for c in t["cols"])
-        st.markdown(f"<table class='cc-t'><tr>{head}</tr>{rows}</table>", unsafe_allow_html=True)
+        with tc:
+            st.markdown(f"<table class='cc-t' style='margin-top:0'><tr>{head}</tr>{rows}</table>", unsafe_allow_html=True)
         st.caption(t["cap_amt"].format(a=area, p=price))
         st.write("")
 
+with right:
+    if "regional_base" in q:
         # ---- basis: how the reference yield was adjusted ----
         sec(t["h3"])
         conf = q["confidence"]
@@ -489,7 +498,7 @@ with right:
         sn = q["station_name"]
         sname = en(sn) if (L == "en" and sn) else sn
         adj = q["adjusted_base"] if not q["fallback"] else q["regional_base"]
-        c1, c2, c3, c4 = st.columns([1.1, 1.2, 0.95, 1.15])
+        c1, c2, c3, c4 = st.columns([1, 1.1, 1.15, 1.1])
         c1.markdown(card(t["m_reg"], f"{q['regional_base']:.0f}", "kg/10a"), unsafe_allow_html=True)
         c2.markdown(card(t["m_adj"], f"{adj:.0f}", "kg/10a", f"▲ {q['uplift_pct']:+.1f}%" if q["uplift_pct"] > 0.05 else "± 0.0%", hl=True), unsafe_allow_html=True)
         c3.markdown(card(t["m_stn"], sname, sub=(t["own"] if q["own_station"] else t["near"]).replace("·", "").strip(), small=True),
