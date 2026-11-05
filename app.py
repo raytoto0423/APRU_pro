@@ -15,13 +15,21 @@ ASSETS = os.path.join(HERE, "assets")
 # brand palette (from the ClimateCredit logo)
 G9, G6, G1, GOLD, LINE = "#0F3D2E", "#1F8F5A", "#E8F3EC", "#E0A526", "#D6E6DB"
 
-st.set_page_config(page_title="ClimateCredit", page_icon=os.path.join(ASSETS, "icon.png"), layout="wide")
+st.set_page_config(page_title="ClimateCredit", page_icon=os.path.join(ASSETS, "icon.png"), layout="wide", initial_sidebar_state="collapsed")
 
+st.markdown("""
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+.stApp, .stApp *:not([data-testid="stIconMaterial"]):not([class*="material"]):not(svg):not(svg *):not(code):not(pre) {
+    font-family: 'Pretendard', 'Noto Sans KR', 'Malgun Gothic', 'NanumGothic', sans-serif;
+}
+</style>
+""", unsafe_allow_html=True)
 st.markdown(f"""
 <style>
 .stApp {{ background:#F5F9F6; }}
 .block-container {{ padding-top: 1.4rem; padding-bottom: 2rem; max-width: 1400px; }}
-header[data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"], [data-testid="stStatusWidget"], #MainMenu, footer {{ display:none !important; }}
+[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"], [data-testid="collapsedControl"], header[data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"], [data-testid="stStatusWidget"], #MainMenu, footer {{ display:none !important; }}
 .cc-prob {{ background:#FFF8E5; border-left:5px solid {GOLD}; border-radius:10px; padding:10px 16px; margin:6px 0 16px; color:{G9}; font-size:.92rem; line-height:1.5; word-break:keep-all; }}
 .cc-subh {{ font-weight:800; color:{G9}; font-size:1rem; margin:2px 0 0; }}
 .cc-tag {{ color:#4C6B5C; font-size:1.0rem; margin-top:10px; line-height:1.4; }}
@@ -47,6 +55,7 @@ table.cc-t th {{ background:{G9}; color:#fff; padding:10px 12px; font-size:.85re
 table.cc-t th:first-child, table.cc-t td:first-child {{ text-align:left; }}
 table.cc-t td {{ padding:10px 12px; text-align:right; border-top:1px solid {LINE}; color:{G9}; font-variant-numeric:tabular-nums; }}
 table.cc-t tr:nth-child(even) td {{ background:#F3F9F5; }}
+table.cc-t:not(.txt) td {{ white-space:nowrap; }}
 table.cc-t td.pos {{ color:#13724A; font-weight:700; }}
 table.cc-t.sm th, table.cc-t.sm td {{ font-size:.74rem; padding:6px 8px; }}
 table.cc-t td.neg {{ color:#B23A2E; font-weight:700; }}
@@ -76,7 +85,8 @@ table.cc-t.txt td:first-child {{ width:22%; }}
 .cc-eq .bars {{ background:#fff; border:1px solid {LINE}; border-radius:12px; padding:8px 10px 4px; text-align:center; }}
 .cc-eq .bars svg {{ width:210px; height:auto; display:block; }}
 .cc-eq .bars div {{ font-size:.74rem; color:#5B7A6B; font-weight:600; }}
-.cc-pb {{ display:flex; gap:10px; align-items:center; background:#FFF8E5; border-left:5px solid {GOLD}; border-radius:10px; padding:9px 14px; color:{G9}; font-weight:700; font-size:.95rem; margin:6px 0 4px; word-break:keep-all; }}
+.cc-call, .cc-sbi, .cc-safe, .cc-note {{ text-wrap:pretty; }}
+.cc-pb {{ text-wrap:balance; display:flex; gap:10px; align-items:center; background:#FFF8E5; border-left:5px solid {GOLD}; border-radius:10px; padding:9px 14px; color:{G9}; font-weight:700; font-size:.95rem; margin:6px 0 4px; word-break:keep-all; }}
 .cc-note {{ color:#6F8A7B; font-size:.78rem; margin:0 0 16px 2px; }}
 .cc-flow {{ display:flex; flex-wrap:wrap; align-items:stretch; gap:8px 6px; margin:4px 0 8px; }}
 .cc-flow .fn {{ flex:1 1 150px; background:#fff; border:1px solid {LINE}; border-radius:14px; padding:12px 10px 10px; text-align:center; }}
@@ -95,30 +105,7 @@ table.cc-t.txt td:first-child {{ width:22%; }}
 </style>
 """, unsafe_allow_html=True)
 
-EN_NAME = {"강진군": "Gangjin", "고흥군": "Goheung", "곡성군": "Gokseong", "광양시": "Gwangyang", "구례군": "Gurye",
-           "나주시": "Naju", "담양군": "Damyang", "목포시": "Mokpo", "무안군": "Muan", "보성군": "Boseong",
-           "순천시": "Suncheon", "신안군": "Sinan", "여수시": "Yeosu", "영광군": "Yeonggwang", "영암군": "Yeongam",
-           "완도군": "Wando", "장성군": "Jangseong", "장흥군": "Jangheung", "진도군": "Jindo", "함평군": "Hampyeong",
-           "해남군": "Haenam", "화순군": "Hwasun",
-           "광주": "Gwangju", "남원": "Namwon", "목포": "Mokpo", "여수": "Yeosu", "완도": "Wando", "순천": "Suncheon",
-           "장흥": "Jangheung", "해남": "Haenam", "고흥": "Goheung"}
-EN_PROV = {"전라남도": "Jeollanam-do", "전라북도": "Jeollabuk-do", "경상남도": "Gyeongsangnam-do", "경상북도": "Gyeongsangbuk-do",
-           "강원도": "Gangwon-do", "경기도": "Gyeonggi-do", "충청남도": "Chungcheongnam-do", "충청북도": "Chungcheongbuk-do",
-           "제주도": "Jeju-do", "인천광역시": "Incheon", "울산광역시": "Ulsan", "광주광역시": "Gwangju"}
-
-
-def en(name):
-    """English display name for a county/station: explicit table first, else romanization of the stem."""
-    if name in EN_NAME:
-        return EN_NAME[name]
-    base = name.rstrip("시군구") or name
-    if base in EN_NAME:
-        return EN_NAME[base]
-    try:
-        from korean_romanizer.romanizer import Romanizer
-        return Romanizer(base).romanize().capitalize()
-    except Exception:
-        return name
+from shared import get_engine, en, EN_NAME, EN_PROV
 
 
 STAGE_NM = {"ko": {"S1_tiller": "분얼기", "S2_panicle": "유수형성기", "S3_heading": "출수·개화기", "S4_ripen": "등숙기"},
@@ -207,6 +194,7 @@ TXT = {
         flow=[("pin", "입력", "논 위치 · 이앙일", ""), ("cloud", "데이터", "기상청 · 통계청", ""), ("net", "모델", "날씨가 수확량에 준 영향", ""),
               ("fix", "보정", "흉년을 평년 수확량으로", "y"), ("won", "결과", "보장수준별 가입금액", "y")],
         safe_t="안전장치", safe_b="확인한 항목이 적으면 보정 없이 5개년 평균을 써요",
+        to_farmer="농가용 쉬운 화면 →",
         ans_lab="{cov}% 보장 · {a:.1f}ha 기준 가입금액", ans_vs="5개년 평균 방식 {r:,.0f}원 대비 · 지급보험금이 아니라 가입 기준 금액이에요",
         ans_same="5개년 평균 방식과 같은 금액이에요 (보정 없음) · 지급보험금이 아니라 가입 기준 금액이에요",
         more_title="더 알아보기 (선택)",
@@ -316,11 +304,12 @@ TXT = {
         intro_exp="Introduction — how Korea's rice insurance works and how ClimateCredit adjusts it",
         eq_title="How Korea's rice insurance works", eq_cap="Yield, last 5 years (illustration)", eq_bad="bad year", eq_avg="average",
         eq_base="Base yield", eq_area="Area", eq_cov="Coverage", eq_cov_s="60-90%", eq_price="Price", eq_amt="Insured amount",
-        eq_prob="Problem: one bad-weather year pulls the average down and lowers the insured amount. Then the cover a farmer can claim after a loss (the claim limit) is lower too, for several years", eq_note="Part of the premium is paid by the government",
+        eq_prob="Problem: one bad-weather year pulls the base yield down, so the insured amount and the claim limit stay lower for years", eq_note="Part of the premium is paid by the government",
         flow_title="How ClimateCredit adjusts it",
         flow=[("pin", "Input", "Location · transplanting date", ""), ("cloud", "Data", "Weather · yield records", ""), ("net", "Model", "Weather's effect on yield", ""),
               ("fix", "Adjust", "Bad year → normal-weather yield", "y"), ("won", "Result", "Insured amount by coverage", "y")],
         safe_t="Safeguard", safe_b="If few items are verified, no adjustment: the 5-year average is used",
+        to_farmer="Farmer-friendly view →",
         ans_lab="Insured amount at {cov}% coverage · {a:.1f} ha", ans_vs="vs {r:,.0f} KRW with the 5-year average · the basis of cover, not a claim payout",
         ans_same="Same as the 5-year average (no adjustment) · the basis of cover, not a claim payout",
         more_title="Learn more (optional)",
@@ -361,11 +350,6 @@ TXT = {
 }
 
 
-@st.cache_resource
-def get_engine():
-    return Engine()
-
-
 @st.cache_data
 def get_backtest(thr):
     p = os.path.join(HERE, "data", "backtest_jeonnam.csv")
@@ -374,7 +358,7 @@ def get_backtest(thr):
 
 def sec(title):
     num, rest = title[0], title[1:].strip()
-    st.markdown(f"<div class='cc-sec'><span class='n'>{'①②③④'.index(num) + 1}</span>{rest}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='cc-sec'><span class='n'>{'①②③④⑤'.index(num) + 1}</span>{rest}</div>", unsafe_allow_html=True)
 
 
 def card(label, value, unit="", delta=None, hl=False, sub="", small=False):
@@ -394,10 +378,13 @@ with h3c:
     lang_label = st.radio("Language / 언어", ["한국어", "English"], index=1 if qp_lang == "en" else 0, horizontal=True)
 L = "en" if lang_label == "English" else "ko"
 t = TXT[L]
+st.session_state["_lang"] = L
 disp = en if L == "en" else (lambda c: c)
 disp_prov = (lambda p: EN_PROV.get(p, p)) if L == "en" else (lambda p: p)
 with h1c:
     st.image(os.path.join(ASSETS, "logo.png"), width=300)
+with h3c:
+    st.page_link("pages/farmer.py", label=t["to_farmer"])
 with h2c:
     st.markdown(f"<div class='cc-tag'><span class='cc-pill'>{t['pill']}</span><b style='color:{G9}'>{t['tag']}</b><br>{t['sub']}</div>",
                 unsafe_allow_html=True)
@@ -429,12 +416,11 @@ with st.expander(t["intro_exp"], expanded=False):
     _fl = "<span class='ar'>›</span>".join(f"<div class='fn {k}'>{ICON[ic]}<b>{ti}</b><span>{sb}</span></div>" for ic, ti, sb, k in t["flow"])
     st.markdown(f"<div class='cc-sbt' style='font-size:1.05rem;margin-top:4px'>{t['flow_title']}</div><div class='cc-flow'>{_fl}</div>"
                 f"<div class='cc-safe'>{ICON['shield']}<div><b>{t['safe_t']}</b> · {t['safe_b']}</div></div>", unsafe_allow_html=True)
-CHECKLIST_H = 960
-ans_box = st.container()          # filled after the inputs are read, but shown first
-left, right = st.columns([1, 2.1], gap="large")
+CHECKLIST_H = 520
+left, right = st.columns([1.75, 1], gap="large")   # left: section 1 (answer), right: section 2 (inputs)
 
-with left:
-    with st.container(height=CHECKLIST_H, border=True):   # scrolls inside; height matches the end of section 3
+with right:
+    with st.container(height=CHECKLIST_H, border=True):   # scrolls inside; height matches the end of section 1
         sec(t["h1"])
         skip = {"전라남도", "광주광역시", "울산광역시", "인천광역시", "제주도"}   # too little history / too little paddy for this model
         provs = ["전라남도"] + sorted({p for (p, _) in eng.cmap if p not in skip})
@@ -462,7 +448,7 @@ with left:
 md = (t_month, t_day)
 q = eng.quote(prov, county, target_year, md, sum(verified), 6, area, price)
 
-with ans_box:
+with left:
     sec(t["h2"])
     if "regional_base" not in q:
         st.markdown(f"<div class='cc-call warn'>{t['missing']}</div>", unsafe_allow_html=True)
@@ -472,10 +458,8 @@ with ans_box:
         d80 = float(r80["diff"])
         vs = t["ans_vs"].format(r=r80["regional_amt"]) if d80 > 0.5 else t["ans_same"]
         dl = f"<span class='cc-delta' style='font-size:1rem'>▲ {d80:,.0f}{t['won']}</span>" if d80 > 0.5 else ""
-        ac, tc = st.columns([1, 1.9], gap="large")
-        with ac:
-            st.markdown(f"<div class='cc-ans' style='min-height:284px;margin:0;display:flex;flex-direction:column;justify-content:center'><div class='k'>{t['ans_lab'].format(cov=int(r80['coverage']), a=area)}</div>"
-                        f"<div class='v'>{r80['personal_amt']:,.0f}{t['won']}</div><div>{dl}</div><div class='s'>{vs}</div></div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='cc-ans' style='margin:0 0 12px'><div class='k'>{t['ans_lab'].format(cov=int(r80['coverage']), a=area)}</div>"
+                    f"<div class='v'>{r80['personal_amt']:,.0f}{t['won']} {dl}</div><div class='s'>{vs}</div></div>", unsafe_allow_html=True)
         rows = ""
         for _, r in tb.iterrows():
             pos = "pos" if r["diff"] > 0 else ""
@@ -484,12 +468,11 @@ with ans_box:
                      f"<td><b>{r['personal_amt']:,.0f}{t['won']}</b></td><td class='{pos}'>{r['diff']:+,.0f}{t['won']}</td>"
                      f"<td>{int(r['subsidy_pct'])}%</td></tr>")
         head = "".join(f"<th>{c}</th>" for c in t["cols"])
-        with tc:
-            st.markdown(f"<table class='cc-t' style='margin-top:0'><tr>{head}</tr>{rows}</table>", unsafe_allow_html=True)
+        st.markdown(f"<table class='cc-t' style='margin-top:0'><tr>{head}</tr>{rows}</table>", unsafe_allow_html=True)
         st.caption(t["cap_amt"].format(a=area, p=price))
         st.write("")
 
-with right:
+with st.container():          # full width below the top row
     if "regional_base" in q:
         # ---- basis: how the base yield was adjusted ----
         sec(t["h3"])
@@ -508,17 +491,20 @@ with right:
         c4.markdown(f"<div class='cc-card'><div class='cc-lab'>{t['m_conf']}</div>"
                     f"<div style='margin-top:4px'><span class='cc-badge' style='background:{bcol}'>{conf}</span></div>"
                     f"<div class='cc-sub'>{reason}</div></div>", unsafe_allow_html=True)
-        st.caption(f"{t['conf_note']}  \n{t['term_note']}")
 
-        if q["fallback"]:
-            st.markdown(f"<div class='cc-call bad'>{t['fb'].format(n=n_ok)}</div>", unsafe_allow_html=True)
-        elif q["replaced_years"]:
-            ys = ", ".join(str(y) for y in q["replaced_years"])
-            msg = t["replaced"].format(ys=ys, mx=MAX_REPLACED, cap=UPLIFT_CAP_PCT)
-            msg = msg.replace("**", "<b>", 1).replace("**", "</b>", 1).replace("**", "<b>", 1).replace("**", "</b>", 1)
-            st.markdown(f"<div class='cc-call'>{msg}</div>", unsafe_allow_html=True)
-        else:
-            st.markdown(f"<div class='cc-call warn'>{t['noshock']}</div>", unsafe_allow_html=True)
+        st.write("")
+        cc_l, cc_r = st.columns([1.5, 1], gap="large")
+        with cc_r:
+            if q["fallback"]:
+                st.markdown(f"<div class='cc-call bad'>{t['fb'].format(n=n_ok)}</div>", unsafe_allow_html=True)
+            elif q["replaced_years"]:
+                ys = ", ".join(str(y) for y in q["replaced_years"])
+                msg = t["replaced"].format(ys=ys, mx=MAX_REPLACED, cap=UPLIFT_CAP_PCT)
+                msg = msg.replace("**", "<b>", 1).replace("**", "</b>", 1).replace("**", "<b>", 1).replace("**", "</b>", 1)
+                st.markdown(f"<div class='cc-call'>{msg}</div>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"<div class='cc-call warn'>{t['noshock']}</div>", unsafe_allow_html=True)
+            st.caption(f"{t['conf_note']}  \n{t['term_note']}")
 
         yrs = q["years"]
         fig, ax = plt.subplots(figsize=(7.4, 3.5))
@@ -546,8 +532,9 @@ with right:
         ax.spines[["top", "right"]].set_visible(False)
         ax.spines[["left", "bottom"]].set_color(LINE)
         fig.tight_layout()
-        with st.container(border=True):
-            st.pyplot(fig)
+        with cc_l:
+            with st.container(border=True):
+                st.pyplot(fig)
 
         st.markdown(f"<div class='cc-subh' style='margin:14px 0 6px'>{t['more_title']}</div>", unsafe_allow_html=True)
         with st.expander(t["guide_title"], expanded=False):
