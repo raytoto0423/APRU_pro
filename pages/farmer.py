@@ -46,6 +46,16 @@ html {{ font-size: 20px; }}
 .fm-yr .bar {{ height:1.5rem; background:#EEF2EF; border-radius:8px; overflow:hidden; display:flex; }}
 .fm-yr .bar i {{ display:block; height:100%; }}
 .fm-yr .t {{ grid-column:2; font-size:.98rem; color:#2F5A49; line-height:1.4; word-break:keep-all; }}
+.fm-pr {{ background:#fff; border:2px solid {GOLD}; border-radius:18px; padding:1rem 1.2rem; margin-bottom:.6rem; }}
+.fm-pr .row {{ margin-bottom:.55rem; }}
+.fm-pr .row span {{ display:block; font-size:1.02rem; font-weight:700; color:#2F5A49; margin-bottom:.2rem; }}
+.fm-pr .b {{ border-radius:10px; padding:.5rem .9rem; font-size:1.3rem; font-weight:800; color:#fff; }}
+.fm-pr .b.a {{ background:{G6}; }}
+.fm-pr .b.p {{ background:{GOLD}; color:{G9}; }}
+.fm-pr .eq {{ font-size:1.25rem; font-weight:800; color:{G9}; margin:.8rem 0 .4rem; line-height:1.4; word-break:keep-all; }}
+.fm-pr ul {{ margin:.2rem 0 .6rem 1.1rem; padding:0; }}
+.fm-pr li {{ font-size:1.02rem; color:#2F5A49; line-height:1.55; margin-bottom:.3rem; word-break:keep-all; }}
+.fm-pr .w {{ font-size:.92rem; color:#6F8A7B; line-height:1.5; }}
 .fm-step {{ display:flex; gap:.9rem; background:#fff; border:1px solid {LINE}; border-radius:16px; padding:.9rem 1.1rem; margin-bottom:.55rem; align-items:flex-start; }}
 .fm-step .n {{ flex:none; background:{G6}; color:#fff; width:2.3rem; height:2.3rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.2rem; }}
 .fm-step b {{ display:block; font-size:1.2rem; color:{G9}; line-height:1.35; }}
@@ -69,7 +79,11 @@ TXT = {
         title="내 논 보험 가입금액, 얼마일까요?", sub="논 위치와 모내기한 날만 고르면 알려 드려요.",
         back="← 전문가용 자세한 화면", prov="도·광역시", county="시·군", month="모내기한 달", day="모내기한 날",
         pyeong="논 넓이 (평)", year="어느 해 가입으로 볼까요?", years=["2025년 가입 (예시)", "올해 2026년 가입"],
-        month_fmt="{m}월", h_res="내 가입금액", h_why="왜 이 금액인가요?", h_next="이제 무엇을 하면 되나요?", h_year="올해(2026년) 가입하면 어떨까요?",
+        month_fmt="{m}월", h_res="내 가입금액", h_why="왜 이 금액인가요?", h_next="이제 무엇을 하면 되나요?", prem_h="보험료가 올라가도 손해가 아니에요",
+        prem_a="받을 수 있는 보장 (가입금액)", prem_b="내가 내는 보험료", prem_about="안팎",
+        prem_eq="같은 비율로 늘어요. 많이 내고 적게 받는 게 아니에요.",
+        prem_pts=["보험료는 가입금액에 비례해요 (보험료율이 같다면).", "흉년 때문에 낮아졌던 보장을 되찾는 거예요. 내 논의 평소 수확량에 더 가깝게 보장돼요.", "보험료의 {s}%는 정부(국비)가 대신 내 줘요 (80% 보장 기준)."],
+        prem_warn="정확한 보험료는 보험사가 알려 줘요. 이 화면은 보험료를 계산하지 않아요.", h_year="올해(2026년) 가입하면 어떨까요?",
         v_adj=("날씨 영향을 반영하면 가입금액이 더 높아져요", "상담할 때 이 기준으로 계산해 달라고 말씀해 보세요."),
         v_same=("지금 방식 그대로 가입하셔도 돼요", "최근 5년 중 날씨 피해가 컸던 해가 없어서 금액이 같아요."),
         v_fb=("서류로 확인할 것이 더 있어요", "확인된 항목이 {n}/6개라서, 지금은 기존 방식(5년 평균)으로 계산했어요."),
@@ -101,7 +115,11 @@ TXT = {
         title="How much is my rice insurance amount?", sub="Pick your field's location and transplanting date. We do the rest.",
         back="← Detailed expert view", prov="Province", county="City / county", month="Transplanting month", day="Transplanting day",
         pyeong="Paddy size (pyeong)", year="Which enrollment year?", years=["2025 enrollment (example)", "This year, 2026"],
-        month_fmt="{m}", h_res="Your insured amount", h_why="Why this amount?", h_next="What should you do now?", h_year="What if you enroll this year (2026)?",
+        month_fmt="{m}", h_res="Your insured amount", h_why="Why this amount?", h_next="What should you do now?", prem_h="A higher premium is not a loss",
+        prem_a="Cover you can claim (insured amount)", prem_b="Premium you pay", prem_about="or so",
+        prem_eq="They rise by the same share. You are not paying more to get less.",
+        prem_pts=["The premium is proportional to the insured amount (at the same premium rate).", "You get back cover that a bad year had pushed down, so it matches what your field normally yields.", "The government pays {s}% of the premium (at 80% coverage)."],
+        prem_warn="The insurer gives the exact premium. This screen does not calculate premiums.", h_year="What if you enroll this year (2026)?",
         v_adj=("Counting the weather's effect raises your insured amount", "At your consultation, ask them to calculate on this basis."),
         v_same=("You can keep enrolling the usual way", "No year in the last 5 had large weather damage, so the amount is the same."),
         v_fb=("More items need to be checked against records", "Only {n}/6 items are verified, so the current method (5-year average) was used."),
@@ -216,8 +234,20 @@ with res_box:
                      f"<div class='t'><b>{t['kg'].format(v=act[i])}</b> · {txt}</div></div>")
         st.markdown(rows, unsafe_allow_html=True)
 
+        # ---- why a higher premium is not a loss (only when the amount goes up) ----
+        shows_prem = (not q["fallback"]) and up > 0.05
+        nxt_no = 3
+        if shows_prem:
+            nxt_no = 4
+            sub80 = int(r80["subsidy_pct"])
+            pts = "".join(f"<li>{pt.format(s=sub80)}</li>" for pt in t["prem_pts"])
+            st.markdown(f"<div class='fm-h'><i>3</i>{t['prem_h']}</div>"
+                        f"<div class='fm-pr'><div class='row'><span>{t['prem_a']}</span><div class='b a'>+{up:.1f}%</div></div>"
+                        f"<div class='row'><span>{t['prem_b']}</span><div class='b p'>+{up:.1f}% {t['prem_about']}</div></div>"
+                        f"<div class='eq'>{t['prem_eq']}</div><ul>{pts}</ul><div class='w'>{t['prem_warn']}</div></div>", unsafe_allow_html=True)
+
         # ---- next ----
-        st.markdown(f"<div class='fm-h'><i>3</i>{t['h_next']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='fm-h'><i>{nxt_no}</i>{t['h_next']}</div>", unsafe_allow_html=True)
         miss = ", ".join(lab for lab, ok in zip(t["items"], verified) if not ok)
         steps = t["s_fb"] if q["fallback"] else (t["s_adj"] if up > 0.05 else t["s_same"])
         html = ""
@@ -232,7 +262,7 @@ with res_box:
                 r26 = next((r for r in q26["table"] if int(r["coverage"]) == 80), q26["table"][len(q26["table"]) // 2])
                 has = (not q26["fallback"]) and q26["uplift_pct"] > 0.05
                 msg = (t["y26_adj"] if has else t["y26_same"]).format(b=q26["regional_base"], a=q26["adjusted_base"], amt=float(r26["personal_amt"]))
-                st.markdown(f"<div class='fm-h'><i>4</i>{t['h_year']}</div>"
+                st.markdown(f"<div class='fm-h'><i>{nxt_no + 1}</i>{t['h_year']}</div>"
                             f"<div class='fm-step'><div class='n' style='background:{GOLD}'>!</div><div><b>{msg}</b><span>{t['y26_ft']}</span></div></div>",
                             unsafe_allow_html=True)
 
