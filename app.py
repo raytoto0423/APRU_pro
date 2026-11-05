@@ -44,6 +44,10 @@ table.cc-t tr:nth-child(even) td {{ background:#F3F9F5; }}
 table.cc-t td.pos {{ color:#13724A; font-weight:700; }}
 .cc-foot {{ color:#6F8A7B; font-size:.78rem; margin-top:18px; text-align:center; }}
 div[data-testid="stVerticalBlockBorderWrapper"] {{ background:#fff; border-color:{LINE} !important; border-radius:14px; }}
+/* the root wrapper is the page-level white panel: give it inner spacing so nothing touches its edge */
+[data-testid="stMainBlockContainer"] > div[data-testid="stVerticalBlockBorderWrapper"] {{ padding: 1.6rem 2rem 1.4rem; box-shadow:0 2px 10px rgba(15,61,46,.06); }}
+table.cc-t {{ margin: 4px 2px 8px; width: calc(100% - 4px); }}
+table.cc-t th, table.cc-t td {{ border-left: none !important; border-right: none !important; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -115,7 +119,7 @@ TXT = {
         irrigs=["Good", "Fair", "Poor"], method="Cultivation method", methods=["Machine transplant", "Hand transplant", "Direct seeding"],
         past="Damage events in the last 5 years", area="Paddy area (ha)",
         verified="**Items verified against records** (tick only what can be checked against enrollment/claims records)",
-        items=["Variety", "Transplant date", "Irrigation/drainage", "Field location", "Method", "Past damage"],
+        items=["Variety", "Transplant date", "Irrigation", "Field location", "Method", "Past damage"],
         price="Insured price (KRW/kg, team assumption)", year="Enrollment year (uses the previous 5 years)",
         note="Inputs used **directly by the model**: **field location (weather station) and transplanting date** (growth-stage weather). "
              "The other items only affect the confidence label for now; adding them to the model is a post-validation step.",
@@ -246,7 +250,7 @@ with right:
             st.markdown(f"<div class='cc-call warn'>{t['noshock']}</div>", unsafe_allow_html=True)
 
         yrs = q["years"]
-        fig, ax = plt.subplots(figsize=(7.4, 3.1))
+        fig, ax = plt.subplots(figsize=(7.4, 3.5))
         fig.patch.set_facecolor("white")
         x = np.arange(len(yrs))
         rep = [y in q["replaced_years"] for y in yrs]
@@ -263,7 +267,8 @@ with right:
         ax.set_ylabel(t["unit"], color=G9)
         ax.tick_params(colors=G9)
         ax.legend(handles=[Patch(color="#B7CFC1", label=t["actual"]), Patch(color=G6, label=t["used"]),
-                           Patch(color=GOLD, label=t["rep_lbl"])], fontsize=8, loc="lower right", frameon=False, ncol=1)
+                           Patch(color=GOLD, label=t["rep_lbl"])], fontsize=8.5, loc="upper center",
+                  bbox_to_anchor=(0.5, -0.12), frameon=False, ncol=3, handlelength=1.2, columnspacing=1.8)
         ax.spines[["top", "right"]].set_visible(False)
         ax.spines[["left", "bottom"]].set_color(LINE)
         fig.tight_layout()
