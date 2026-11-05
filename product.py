@@ -113,6 +113,42 @@ class Engine:
         zero = np.zeros_like(x)
         return float(self.predict(x)[0] - self.predict(zero)[0])
 
+    def season_curves(self, sid, year, md):
+        """Weekly-smoothed Apr-Oct curves for `year` vs the station's normal (mean and 10-90% band over all years),
+        plus the four growth-stage windows for transplant date `md` and a per-stage comparison."""
+        from weather import STAGES
+        lo, hi = 91, 304                                  # Apr 1 .. Oct 31 (non-leap day of year)
+        g = self.asos[self.asos.stnId == sid].copy()
+        g["yr"] = g["date"].dt.year
+        g["doy"] = g["date"].dt.dayofyear
+        spec = {"rain": ("sumRn", "sum"), "temp": ("avgTa", "mean"), "sun": ("sumSsHr", "mean"), "wind": ("maxInsWs", "max")}
+        out = {"x": list(range(lo, hi + 1)), "vars": {}, "years": (int(g["yr"].min()), int(g["yr"].max()))}
+        t0 = pd.Timestamp(2001, md[0], md[1]).dayofyear
+        out["stages"] = [(k, t0 + a, t0 + b) for k, (a, b) in STAGES.items()]
+        A, F = self._station_years(sid, md)
+        base = {"rain": "rain", "temp": "tmean", "sun": "sun", "wind": "wind"}
+        import warnings
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
+        for v, (col, how) in spec.items():
+            pv = g.pivot_table(index="yr", columns="doy", values=col, aggfunc="first").reindex(columns=range(lo, hi + 1))
+            if v == "rain":
+                pv = pv.fillna(0.0)
+            r = pv.T.rolling(7, min_periods=4)
+            sm = (r.sum() if how == "sum" else r.mean() if how == "mean" else r.max()).T
+            if year not in sm.index:
+                continue
+            arr = sm.values
+            stage_rows = []
+            for k, _, _ in out["stages"]:
+                b = f"{k}_{base[v]}"
+                sd = float(F[b].std()) or 1.0
+                stage_rows.append({"stage": k, "this": float(F.loc[year, b]), "normal": float(F[b].mean()),
+                                   "z": float(A.loc[year, b + "_anom"]) / sd})
+            out["vars"][v] = {"this": sm.loc[year].values, "mean": np.nanmean(arr, axis=0),
+                              "p10": np.nanpercentile(arr, 10, axis=0), "p90": np.nanpercentile(arr, 90, axis=0),
+                              "stages": stage_rows}
+        return out
+
     def explain(self, sid, year, md, topk=6):
         """Break the weather effect of `year` into additive parts.
 

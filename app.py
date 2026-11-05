@@ -50,10 +50,11 @@ table.cc-t.sm th, table.cc-t.sm td {{ font-size:.74rem; padding:6px 8px; }}
 table.cc-t td.neg {{ color:#B23A2E; font-weight:700; }}
 table.cc-t tr.tot td {{ background:{G1} !important; border-top:2px solid {G6}; }}
 .cc-sbt {{ font-weight:700; color:{G9}; font-size:.9rem; margin:6px 0 6px; }}
-.cc-sb {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin:0 0 14px; }}
-.cc-sbi {{ background:#fff; border:1px solid {LINE}; border-top:4px solid {G6}; border-radius:10px; padding:9px 12px; font-size:.78rem; line-height:1.4; color:#2F5A49; }}
-.cc-sbi.y {{ border-top-color:{GOLD}; }}
-.cc-sbi.r {{ border-top-color:#C8D6CD; }}
+.cc-sb {{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:0 0 14px; align-items:stretch; }}
+@media (max-width: 760px) {{ .cc-sb {{ grid-template-columns:1fr; }} }}
+.cc-sbi {{ background:#fff; border:1px solid {LINE}; border-left:5px solid {G6}; border-radius:10px; padding:10px 14px; font-size:.8rem; line-height:1.5; color:#2F5A49; word-break:keep-all; overflow-wrap:break-word; }}
+.cc-sbi.y {{ border-left-color:{GOLD}; }}
+.cc-sbi.r {{ border-left-color:#B9C9BF; }}
 .cc-sbi b {{ display:block; color:{G9}; font-size:.8rem; margin-bottom:3px; }}
 .cc-foot {{ color:#6F8A7B; font-size:.78rem; margin-top:18px; text-align:center; }}
 div[data-testid="stVerticalBlockBorderWrapper"] {{ background:#fff; border-color:{LINE} !important; border-radius:14px; }}
@@ -109,12 +110,22 @@ def feat_label(key, lang):
 TXT = {
     "ko": dict(
         ex_title="이 기상 효과(%)는 어떻게 계산했나요?", ex_year="살펴볼 연도",
-        ex_how=("① 이앙일을 기준으로 생육 단계 4개 구간을 만들고 ② 각 구간의 기상을 그 관측소의 평소(1996~2025 평균)와 비교해 차이를 구한 뒤 "
-                "③ 모델이 그 차이를 수확량 영향(%p)으로 바꿉니다. 아래는 영향이 큰 항목 순서입니다."),
+        ex_how=("① 이앙일을 기준으로 생육 단계 4개 구간을 만들고 ② 각 구간의 기상을 그 관측소의 평소 값과 비교해 차이를 구한 뒤 "
+                "③ 모델이 그 차이를 수확량 영향(%p)으로 바꿉니다. (평소 = 그 관측소의 관측 기간 평균) 아래는 영향이 큰 항목 순서입니다."),
         ex_cols=["단계 · 항목", "그해 값", "평소", "차이", "수확량 영향(%p)"],
         ex_other="나머지 선형 항목", ex_nn="신경망 기여분(항목별 분해 불가)", ex_total="합계 = 기상 효과",
         ex_note="선형 모델(ridge) 절반은 항목별로 분해되고, 신경망 절반은 한 덩어리로 표시합니다. 모든 줄의 합이 위의 기상 효과와 같습니다.",
         ex_chart="항목별 수확량 영향(%p)",
+        vx_title="이 해의 날씨는 어디가 평소와 달랐나요?", vx_year="살펴볼 연도",
+        vx_how="보고 싶은 날씨 항목을 체크하세요. 붉은 선이 그해, 점선이 평소(이 관측소의 관측 기간 평균), 연한 초록 띠가 평소의 중간 80% 범위예요. 배경 색은 이앙일 기준 생육 단계입니다.",
+        vx_vars=[("rain", "강수량"), ("temp", "기온"), ("sun", "일조시간"), ("wind", "바람(최대순간풍속)")],
+        vx_units={"rain": "mm/주", "temp": "℃", "sun": "시간/일", "wind": "m/s"},
+        vx_band="평소 중간 80%", vx_norm="평소 평균", vx_none="위에서 항목을 하나 이상 선택하세요.",
+        vx_gap="{var}: **{stage}**에서 가장 크게 벗어남 — 그해 {this:.1f}{unit} vs 평소 {normal:.1f}{unit} (평소 변동의 {z:.1f}배 {dir})",
+        vx_hi="높음", vx_lo="낮음", vx_flag="평소 범위를 벗어남",
+        vx_months=["4월", "5월", "6월", "7월", "8월", "9월", "10월"],
+        vx_note="모델의 판단은 한 항목이 아니라 네 단계의 여러 항목을 합친 결과입니다. 선은 7일 단위로 부드럽게 만든 값이고, 강수량은 7일 합계입니다.",
+        ex_title2="모델 상세: 항목별 영향 분해 (선택)",
         tag="논 위치와 이앙일에 따른 기상 노출을 반영한 가입금액", pill="프로토타입",
         sb_title="현재 구현 범위",
         sb1_k="지금 동작", sb1_v="선택한 위치와 이앙일로 기상청 일자료에서 생육 단계별 기상을 즉석에서 다시 계산 → 모델 예측 → 이상기후 해 대체 → 가입금액 비교",
@@ -155,11 +166,21 @@ TXT = {
     "en": dict(
         ex_title="How is this weather effect (%) calculated?", ex_year="Year to inspect",
         ex_how=("① Four growth-stage windows are built from the transplanting date. ② Each window's weather is compared with the station's normal "
-                "(1996–2025 average). ③ The model turns those differences into a yield effect (% points). Items are sorted by size of impact."),
+                "(average over its record). ③ The model turns those differences into a yield effect (% points). Items are sorted by size of impact."),
         ex_cols=["Stage · variable", "This year", "Normal", "Difference", "Yield effect (% pts)"],
         ex_other="Other linear terms", ex_nn="Neural-network share (not split by item)", ex_total="Total = weather effect",
         ex_note="Half of the model (ridge, linear) can be split item by item; the neural-network half is shown as one block. All rows add up to the weather effect shown above.",
         ex_chart="Yield effect by item (% pts)",
+        vx_title="Where did this year's weather differ from normal?", vx_year="Year to inspect",
+        vx_how="Tick the weather items you want to see. The red line is that year, the dashed line is the normal (average over this station's record) and the pale green band is the middle 80% of years. Background colours are the growth stages for the transplanting date.",
+        vx_vars=[("rain", "Rainfall"), ("temp", "Temperature"), ("sun", "Sunshine"), ("wind", "Wind (peak gust)")],
+        vx_units={"rain": "mm/week", "temp": "°C", "sun": "h/day", "wind": "m/s"},
+        vx_band="Normal: middle 80% of years", vx_norm="Normal average", vx_none="Tick at least one item above.",
+        vx_gap="{var}: biggest gap in **{stage}** — {this:.1f} {unit} vs {normal:.1f} {unit} normal ({z:.1f}× the usual year-to-year variation, {dir})",
+        vx_hi="higher", vx_lo="lower", vx_flag="outside the usual range",
+        vx_months=["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+        vx_note="The model's judgement is the combined effect of many items across four stages, not any single line. Lines are 7-day smoothed; rainfall is a 7-day total.",
+        ex_title2="Model details: contribution by item (optional)",
         tag="Insured amounts that reflect weather exposure at each field's location and transplanting date", pill="PROTOTYPE",
         sb_title="What this prototype does today",
         sb1_k="Working now", sb1_v="For the chosen location and transplanting date, weather by growth stage is recomputed live from KMA daily data → model prediction → shock-year replacement → insured-amount comparison.",
@@ -347,9 +368,58 @@ with right:
         with st.container(border=True):
             st.pyplot(fig)
 
-        with st.expander(t["ex_title"], expanded=True):
+        with st.expander(t["vx_title"], expanded=True):
+            st.markdown(f"<div style='font-size:.85rem;color:#2F5A49;margin-bottom:6px'>{t['vx_how']}</div>", unsafe_allow_html=True)
+            ey = st.selectbox(t["vx_year"], yrs, index=int(np.argmin(q["effect_pct"])), key=f"exy_{prov}_{county}_{target_year}_{md}")
+            cbs = st.columns(4)
+            sel = [k for i, (k, lab) in enumerate(t["vx_vars"]) if cbs[i].checkbox(lab, value=(k in ("rain", "sun")), key=f"vx_{k}")]
+            if not sel:
+                st.info(t["vx_none"])
+            else:
+                cur = eng.season_curves(q["station"], ey, md)
+                xs = np.array(cur["x"])
+                f3, axs = plt.subplots(len(sel), 1, figsize=(8.2, 2.3 * len(sel) + 0.5), sharex=True)
+                axs = np.atleast_1d(axs)
+                labmap = dict(t["vx_vars"])
+                for ai, (ax, k) in enumerate(zip(axs, sel)):
+                    d = cur["vars"].get(k)
+                    if d is None:
+                        continue
+                    for si, (sk, a, b) in enumerate(cur["stages"]):
+                        ax.axvspan(a, b, color="#EEF6F1" if si % 2 == 0 else "#FFF6DC", zorder=0)
+                        if ai == 0:
+                            ax.text((a + b) / 2, 1.02, STAGE_NM[L][sk], transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=8, color="#5B7A6B")
+                    ax.fill_between(xs, d["p10"], d["p90"], color="#BFDCCB", alpha=0.85, lw=0, label=t["vx_band"], zorder=1)
+                    ax.plot(xs, d["mean"], color="#5B7A6B", ls="--", lw=1.4, label=f"{t['vx_norm']} ({cur['years'][0]}–{cur['years'][1]})", zorder=2)
+                    ax.plot(xs, d["this"], color="#B23A2E", lw=2.3, label=str(ey), zorder=3)
+                    ax.set_ylabel(f"{labmap[k]}\n({t['vx_units'][k]})", fontsize=8.5, color=G9)
+                    ax.tick_params(colors=G9, labelsize=8)
+                    ax.spines[["top", "right"]].set_visible(False)
+                    ax.spines[["left", "bottom"]].set_color(LINE)
+                    ax.set_xlim(xs[0], xs[-1])
+                    if ai == 0:
+                        ax.legend(fontsize=8, loc="upper left", frameon=False, ncol=3, bbox_to_anchor=(0, 1.32))
+                mt = [91, 121, 152, 182, 213, 244, 274]
+                axs[-1].set_xticks(mt)
+                axs[-1].set_xticklabels(t["vx_months"], color=G9)
+                f3.tight_layout()
+                with st.container(border=True):
+                    st.pyplot(f3)
+                for k in sel:
+                    d = cur["vars"].get(k)
+                    if d is None:
+                        continue
+                    big = max(d["stages"], key=lambda r: abs(r["z"]))
+                    msg = t["vx_gap"].format(var=labmap[k], stage=STAGE_NM[L][big["stage"]], this=big["this"], normal=big["normal"],
+                                             unit=t["vx_units"][k].split("/")[0] if k != "sun" else t["vx_units"][k], z=abs(big["z"]),
+                                             dir=t["vx_hi"] if big["z"] > 0 else t["vx_lo"])
+                    msg = msg.replace("**", "<b>", 1).replace("**", "</b>", 1)
+                    flag = f" <span style='color:#B23A2E;font-weight:700'>▲ {t['vx_flag']}</span>" if abs(big["z"]) >= 1.5 else ""
+                    st.markdown(f"<div style='font-size:.85rem;color:#2F5A49;margin:2px 0'>{msg}{flag}</div>", unsafe_allow_html=True)
+                st.caption(t["vx_note"])
+
+        with st.expander(t["ex_title2"], expanded=False):
             st.markdown(f"<div style='font-size:.85rem;color:#2F5A49;margin-bottom:6px'>{t['ex_how']}</div>", unsafe_allow_html=True)
-            ey = st.selectbox(t["ex_year"], yrs, index=int(np.argmin(q["effect_pct"])), key=f"exy_{prov}_{county}_{target_year}_{md}")
             ex = eng.explain(q["station"], ey, md)
             if ex:
                 rws = ex["rows"]
